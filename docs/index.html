@@ -1,0 +1,858 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Machine-Centric Marketing and Machine-Verifiable Honesty: An Interdisciplinary Review | Romul Protocol</title>
+<meta name="author" content="Human and Machine">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+ --desk: #0D1117;
+ --desk-text: #8B9A8B;
+ --paper: #FFFFFF;
+ --ink: #0D1117;
+ --ink-soft: #3E4A3E;
+ --muted: #667366;
+ --green: #16A34A;
+ --green-bright: #22C55E;
+ --green-tint: #F1F8F3;
+ --gold: #C9A227;
+ --gold-tint: #FBF7EA;
+ --marble: #D9D4C7;
+ --line: #E4E1D8;
+ --head-bg: #0D1117;
+ --head-text: #E8F5E8;
+ box-sizing: border-box;
+ padding-top: env(safe-area-inset-top, 0px);
+ padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+@media (prefers-color-scheme: dark) {
+ :root:not([data-theme="light"]) { --desk: #0D1117; --desk-text: #8B9A8B; }
+}
+:root[data-theme="dark"] { --desk: #0D1117; --desk-text: #8B9A8B; }
+:root[data-theme="light"] { --desk: #161B22; }
+
+*, *::before, *::after { box-sizing: inherit; }
+html { scroll-padding-top: env(safe-area-inset-top, 0px); -webkit-text-size-adjust: 100%; }
+body {
+ margin: 0;
+ background: var(--desk);
+ color: var(--ink);
+ font-family: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+ font-size: 15px;
+ line-height: 1.6;
+ 
+}
+
+/* ---------- screen chrome ---------- */
+.print-hint {
+ max-width: 210mm;
+ margin: 24px auto 14px;
+ padding: 0 16px;
+ color: var(--desk-text);
+ font-size: 13px;
+ line-height: 1.5;
+}
+.print-hint b { color: #E8F5E8; font-weight: 600; }
+
+.sheet {
+ width: 100%;
+ max-width: 210mm;
+ margin: 0 auto 40px;
+ background: var(--paper);
+ border-collapse: collapse;
+ table-layout: fixed;
+ box-shadow: 0 8px 32px rgba(0,0,0,.3);
+ border-radius: 4px;
+}
+.sheet > thead > tr > td,
+.sheet > tfoot > tr > td,
+.sheet > tbody > tr > td { padding: 0 18mm; vertical-align: top; }
+
+/* running header */
+.run-head {
+ display: flex;
+ align-items: center;
+ justify-content: space-between;
+ gap: 16px;
+ padding: 9mm 0 3.2mm;
+ border-bottom: 0.6pt solid var(--marble);
+ margin-bottom: 7mm;
+}
+.run-head .logo { height: 6.2mm; width: auto; display: block; flex: none; }
+.run-head .run-title {
+ font-family: "Exo 2", "Inter", system-ui, sans-serif;
+ font-weight: 600;
+ font-size: 8.5px;
+ letter-spacing: 0.08em;
+ color: var(--muted);
+ text-align: right;
+ white-space: nowrap;
+}
+.run-foot {
+ display: flex;
+ justify-content: space-between;
+ gap: 16px;
+ border-top: 0.6pt solid var(--marble);
+ padding: 3mm 0 9mm;
+ margin-top: 8mm;
+ font-size: 9px;
+ color: var(--muted);
+}
+.run-foot .author { color: var(--ink-soft); font-weight: 600; }
+.run-foot .author span { color: var(--green); }
+
+/* ---------- cover ---------- */
+.cover { padding: 10mm 0 9mm; border-bottom: 1.5pt solid var(--ink); margin-bottom: 9mm; }
+.kind {
+ font-family: "Exo 2", system-ui, sans-serif;
+ font-weight: 600;
+ font-size: 12px;
+ letter-spacing: 0.08em;
+ color: var(--green);
+ margin: 0 0 7mm;
+}
+.kind::before {
+ content: "";
+ display: inline-block;
+ width: 22px; height: 2px;
+ background: var(--green-bright);
+ vertical-align: middle;
+ margin-right: 10px;
+ position: relative; top: -2px;
+}
+h1.title {
+ font-family: "Exo 2", system-ui, sans-serif;
+ font-weight: 700;
+ font-size: clamp(30px, 6.4vw, 46px);
+ line-height: 1.04;
+ letter-spacing: 0.01em;
+ margin: 0 0 7mm;
+ color: var(--ink);
+}
+h1.title span { display: block; }
+.subtitle {
+ font-family: "Exo 2", system-ui, sans-serif;
+ font-weight: 500;
+ font-size: 19px;
+ line-height: 1.35;
+ color: var(--ink-soft);
+ margin: 0 0 6mm;
+ max-width: 34em;
+}
+.lede { font-size: 15.5px; color: var(--ink-soft); max-width: 38em; margin: 0 0 10mm; }
+.cover-meta {
+ display: grid;
+ grid-template-columns: 1fr 1fr;
+ gap: 6mm;
+ padding-top: 5mm;
+ border-top: 0.6pt solid var(--marble);
+}
+.cover-meta dt { font-size: 11px; color: var(--muted); margin: 0 0 2px; }
+.cover-meta dd { margin: 0; font-size: 14px; font-weight: 600; color: var(--ink); }
+.cover-meta dd.author-name { font-family: "Exo 2", system-ui, sans-serif; font-size: 17px; font-weight: 700; }
+
+/* ---------- body ---------- */
+.doc { padding-bottom: 2mm; }
+h2 {
+ font-family: "Exo 2", system-ui, sans-serif;
+ font-weight: 700;
+ font-size: 22px;
+ line-height: 1.2;
+ margin: 11mm 0 4mm;
+ display: flex;
+ gap: 12px;
+ align-items: baseline;
+ break-after: avoid;
+ page-break-after: avoid;
+}
+h2 .n {
+ font-weight: 600;
+ font-size: 15px;
+ letter-spacing: 0.08em;
+ color: var(--green);
+ min-width: 26px;
+ flex: none;
+}
+section:first-child h2 { margin-top: 0; }
+h3 {
+ font-family: "Exo 2", system-ui, sans-serif;
+ font-weight: 600;
+ font-size: 16.5px;
+ line-height: 1.3;
+ margin: 7mm 0 2.5mm;
+ color: var(--ink);
+ break-after: avoid;
+ page-break-after: avoid;
+}
+h3 .n { color: var(--green); letter-spacing: 0.08em; margin-right: 8px; }
+p { margin: 0 0 3.2mm; orphans: 3; widows: 3; }
+strong { font-weight: 600; color: var(--ink); }
+.cite { color: var(--green); font-weight: 600; font-size: 0.86em; white-space: nowrap; }
+
+.note {
+ background: var(--green-tint);
+ border-left: 3px solid var(--green-bright);
+ padding: 3.4mm 4.5mm;
+ margin: 4.5mm 0;
+ border-radius: 0 6px 6px 0;
+ break-inside: avoid;
+ page-break-inside: avoid;
+ -webkit-print-color-adjust: exact; print-color-adjust: exact;
+}
+.note p:last-child { margin-bottom: 0; }
+.note.own { background: #F4F4F0; border-left-color: var(--ink); -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+.note.own > p > strong:first-child { color: var(--ink); }
+section.abstract { border-bottom: 0.6pt solid var(--marble); padding-bottom: 4mm; margin-bottom: 2mm; }
+section.abstract h2 .n { color: var(--green-bright); }
+.cover-meta .en { display:block; font-family:"Inter",system-ui,sans-serif; font-size:12px; font-weight:500; color:var(--muted); }
+.note.status { background: var(--gold-tint); border-left-color: var(--gold); }
+.note .line { display: block; }
+.note.key { background: var(--ink); color: var(--head-text); border-left-color: var(--green-bright); }
+.note.key strong { color: #4ADE80; }
+
+/* tables */
+.tbl-wrap { overflow-x: auto; margin: 4.5mm 0 5mm; -webkit-overflow-scrolling: touch; }
+table.data {
+ width: 100%;
+ min-width: 520px;
+ border-collapse: collapse;
+ font-size: 12.5px;
+ line-height: 1.45;
+}
+table.data th {
+ background: var(--head-bg);
+ color: var(--head-text);
+ font-family: "Exo 2", system-ui, sans-serif;
+ font-weight: 600;
+ font-size: 12.5px;
+ text-align: left;
+ padding: 2.6mm 3mm;
+ vertical-align: bottom;
+ -webkit-print-color-adjust: exact; print-color-adjust: exact;
+}
+table.data td { padding: 2.4mm 3mm; border-bottom: 0.6pt solid var(--line); vertical-align: top; }
+table.data tr { break-inside: avoid; page-break-inside: avoid; }
+table.data td:first-child { font-weight: 600; color: var(--ink); }
+table.data tbody tr:nth-child(even) td { background: #FAFAF7; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+table.data thead { display: table-header-group; }
+table.terms td:first-child { width: 20%; }
+table.compare td:first-child { width: 20%; }
+table.compare td:nth-child(3) { color: var(--ink); }
+table.compare th:nth-child(3) { color: #4ADE80; }
+
+/* architecture */
+table.arch { width: 100%; min-width: 480px; border-collapse: collapse; font-size: 13px; line-height: 1.45; }
+table.arch td { padding: 3mm 3.5mm; vertical-align: top; border-bottom: 0.6pt solid var(--line); }
+table.arch td:first-child { width: 42%; font-weight: 600; }
+table.arch tr.root td {
+ background: var(--head-bg); color: var(--head-text); border-bottom: none;
+ -webkit-print-color-adjust: exact; print-color-adjust: exact;
+}
+table.arch tr.root td:first-child { font-family: "Exo 2", system-ui, sans-serif; font-size: 15px; letter-spacing: 0.08em; }
+table.arch tr:not(.root) td:first-child { padding-left: 7mm; position: relative; }
+table.arch tr:not(.root) td:first-child::before {
+ content: ""; position: absolute; left: 3.5mm; top: 0; bottom: 0; width: 2px; background: var(--green-bright);
+}
+table.arch tr { break-inside: avoid; page-break-inside: avoid; }
+table.arch { break-inside: avoid; page-break-inside: avoid; }
+.formula + .closing { break-before: avoid; }
+table.arch .arrow { color: var(--green); }
+
+/* roles & components */
+dl.roles, dl.parts { margin: 3mm 0 4mm; }
+dl.roles div, dl.parts div {
+ display: grid; grid-template-columns: minmax(0, 13em) minmax(0, 1fr); gap: 4mm;
+ padding: 2.4mm 0; border-bottom: 0.6pt solid var(--line);
+ break-inside: avoid; page-break-inside: avoid;
+}
+dl.roles div:first-child, dl.parts div:first-child { border-top: 0.6pt solid var(--line); }
+dl.roles dt, dl.parts dt { font-family: "Exo 2", system-ui, sans-serif; font-weight: 600; color: var(--ink); }
+dl.parts dt { color: var(--green); }
+dl.roles dd, dl.parts dd { margin: 0; }
+.roles-lead { margin-top: 4mm; }
+
+/* lists */
+ol.args, ul.questions { margin: 3mm 0 4mm; padding: 0; list-style: none; }
+ol.args { counter-reset: arg; }
+ol.args li, ul.questions li {
+ position: relative; padding-left: 9mm; margin: 0 0 2.6mm;
+ break-inside: avoid; page-break-inside: avoid;
+}
+ol.args li::before {
+ counter-increment: arg; content: counter(arg);
+ position: absolute; left: 0; top: 0;
+ font-family: "Exo 2", system-ui, sans-serif; font-weight: 600; color: var(--green);
+ letter-spacing: 0.08em;
+}
+ul.questions li::before {
+ content: ""; position: absolute; left: 1.5mm; top: 0.7em;
+ width: 6px; height: 6px; background: var(--green-bright); border-radius: 1px; transform: rotate(45deg);
+ -webkit-print-color-adjust: exact; print-color-adjust: exact;
+}
+
+.pair {
+ display: block; margin: 2mm 0 0; padding: 3mm 4mm;
+ border: 1pt solid var(--green-bright); border-radius: 6px;
+ font-family: "Exo 2", system-ui, sans-serif; font-weight: 600; font-size: 16px; color: var(--ink);
+}
+
+/* sources */
+ol.sources { list-style: none; margin: 3mm 0 4mm; padding: 0; }
+ol.sources li {
+ display: grid; grid-template-columns: 9mm minmax(0, 1fr); gap: 1mm;
+ padding: 2.6mm 0; border-bottom: 0.6pt solid var(--line);
+ font-size: 13px; line-height: 1.5;
+ break-inside: avoid; page-break-inside: avoid;
+}
+ol.sources .num { font-family: "Exo 2", system-ui, sans-serif; font-weight: 600; color: var(--green); letter-spacing: 0.04em; }
+ol.sources a { color: var(--green); text-decoration: none; overflow-wrap: anywhere; word-break: break-word; font-size: 12px; }
+ol.sources a:hover { text-decoration: underline; }
+
+.formula {
+ margin: 8mm 0 2mm; padding: 5mm 5.5mm;
+ background: var(--ink); color: var(--head-text);
+ border-radius: 8px;
+ break-inside: avoid; page-break-inside: avoid;
+ -webkit-print-color-adjust: exact; print-color-adjust: exact;
+}
+.formula strong { color: #4ADE80; display: block; font-family: "Exo 2", system-ui, sans-serif; font-size: 13px; letter-spacing: 0.08em; margin-bottom: 2mm; }
+.formula em { font-style: italic; font-size: 15px; line-height: 1.55; }
+.closing { margin-top: 7mm; font-size: 12px; color: var(--muted); }
+.closing b { color: var(--ink-soft); font-weight: 600; }
+
+a:focus-visible { outline: 2px solid var(--green-bright); outline-offset: 2px; }
+
+/* ---------- mobile ---------- */
+@media (max-width: 640px) {
+ body { font-size: 14.5px; }
+ .sheet { border-radius: 0; margin-bottom: 0; }
+ .sheet > thead > tr > td, .sheet > tfoot > tr > td, .sheet > tbody > tr > td { padding: 0 18px; }
+ .run-head { padding-top: 18px; }
+ .run-head .run-title { display: none; }
+ .run-foot { flex-direction: column; gap: 4px; }
+ .cover-meta { grid-template-columns: 1fr; }
+ dl.roles div, dl.parts div { grid-template-columns: 1fr; gap: 1mm; }
+ h2 { font-size: 20px; }
+ h1.title { font-size: 24px; }
+ .subtitle { font-size: 17px; }
+}
+
+/* ---------- print ---------- */
+@page {
+ size: A4;
+ margin: 0 18mm 16mm 18mm;
+ @bottom-left { content: "Author: Human and Machine · Romul Protocol"; font-family: "Inter", Arial, sans-serif; font-size: 7.5pt; font-weight: 600; color: #3E4A3E; vertical-align: top; padding-top: 3mm; border-top: 0.6pt solid #D9D4C7; }
+ @bottom-right { content: "Concept paper · October 2026 · " counter(page) " / " counter(pages); font-family: "Inter", Arial, sans-serif; font-size: 7.5pt; color: #667366; vertical-align: top; padding-top: 3mm; border-top: 0.6pt solid #D9D4C7; }
+}
+@media print {
+ html, body { background: #fff; }
+ :root { padding: 0; }
+ body { font-size: 10.4pt; line-height: 1.55; }
+ .print-hint { display: none; }
+ .sheet { max-width: none; width: 100%; margin: 0; box-shadow: none; border-radius: 0; }
+ .sheet > thead > tr > td, .sheet > tfoot > tr > td, .sheet > tbody > tr > td { padding: 0; }
+ .run-head { padding-top: 10mm; margin-bottom: 6mm; }
+ .sheet > tfoot { display: none; }
+
+ .tbl-wrap { overflow: visible; }
+ table.data, table.arch { min-width: 0; }
+ table.data { font-size: 8.8pt; }
+ table.data th { font-size: 8.8pt; }
+ table.arch { font-size: 9.2pt; }
+ ol.sources li { font-size: 9.2pt; }
+ ol.sources a { font-size: 8.4pt; }
+ h1.title { font-size: 34pt; }
+ .subtitle { font-size: 14pt; }
+ .lede { font-size: 11pt; }
+ h2 { font-size: 16pt; margin-top: 9mm; }
+ h2 .n { font-size: 11.5pt; }
+ h3 { font-size: 12.5pt; }
+ .cover { min-height: 222mm; display: flex; flex-direction: column; justify-content: flex-end; break-after: page; page-break-after: always; border-bottom: none; margin-bottom: 0; padding-bottom: 6mm; }
+}
+
+/* soft palette overrides */
+.note.key { background: #ECEEEB; color: var(--ink); border-left-color: var(--green-bright); }
+.note.key strong { color: var(--green); }
+.formula { background: #ECEEEB; color: var(--ink); border-left: 3px solid var(--green-bright); }
+.formula strong { color: var(--green); }
+table.data th { background: #E3E6E2; color: var(--ink); border-bottom: 1.5pt solid var(--green-bright); }
+table.compare th:nth-child(3) { color: var(--green); }
+table.arch tr.root td { background: #E3E6E2; color: var(--ink); border-bottom: 1.5pt solid var(--green-bright); }
+
+/* final section */
+.final-lede { font-family: "Exo 2", system-ui, sans-serif; font-weight: 500; font-size: 18px; line-height: 1.45; color: var(--ink); margin: 0 0 5mm; }
+.final-lede strong { color: var(--green); font-weight: 600; }
+.chips { display: flex; flex-wrap: wrap; gap: 2.2mm; margin: 0 0 5mm; }
+.chips span { font-family: "Exo 2", system-ui, sans-serif; font-weight: 600; font-size: 13px; padding: 1.6mm 3.6mm; border: 1pt solid var(--green-bright); border-radius: 999px; color: var(--ink); background: var(--green-tint); -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+.qgrid { display: grid; gap: 3mm; margin: 0 0 3mm; break-inside: avoid; page-break-inside: avoid; }
+.qgrid.three { grid-template-columns: repeat(3, minmax(0,1fr)); }
+.qgrid.two { grid-template-columns: repeat(2, minmax(0,1fr)); margin-bottom: 6mm; }
+.qcard { border: 0.6pt solid var(--marble); border-radius: 8px; padding: 3.4mm 4mm; background: #FAFAF8; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+.qcard .q { font-size: 12.5px; color: var(--muted); line-height: 1.4; margin-bottom: 2mm; }
+.qcard .a { font-family: "Exo 2", system-ui, sans-serif; font-weight: 700; font-size: 15px; color: var(--ink); }
+.qcard .ru { font-size: 12px; color: var(--green); margin-top: 1mm; font-weight: 600; }
+.qcard.hl { background: var(--green-tint); border: 1pt solid var(--green-bright); border-left: 4px solid var(--green-bright); }
+.qcard.hl .q { color: var(--ink-soft); }
+.qcard.hl .a { font-size: 16.5px; }
+blockquote.pull { margin: 7mm 0 6mm; padding: 1mm 0 1mm 6mm; border-left: 4px solid var(--green-bright); font-family: "Exo 2", system-ui, sans-serif; font-weight: 600; font-size: 21px; line-height: 1.35; color: var(--ink); break-inside: avoid; page-break-inside: avoid; }
+.triad { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 3mm; margin: 2mm 0 7mm; break-inside: avoid; page-break-inside: avoid; }
+.titem { border-top: 2pt solid var(--green-bright); padding: 3mm 1mm 0 0; }
+.titem .tn { font-family: "Exo 2", system-ui, sans-serif; font-weight: 700; font-size: 13px; letter-spacing: 0.08em; color: var(--green); margin-bottom: 1.5mm; }
+.titem .tt { font-family: "Exo 2", system-ui, sans-serif; font-weight: 700; font-size: 15px; color: var(--ink); line-height: 1.3; margin-bottom: 1mm; }
+.titem .td { font-size: 12.5px; color: var(--ink-soft); line-height: 1.45; }
+@media (max-width: 640px) { .qgrid.three, .qgrid.two, .triad { grid-template-columns: 1fr; } blockquote.pull { font-size: 18px; } }
+@media print { .final-lede { font-size: 13pt; } blockquote.pull { font-size: 15.5pt; } .qcard .q, .titem .td { font-size: 8.8pt; } .qcard .a, .titem .tt { font-size: 10.8pt; } .qcard.hl .a { font-size: 11.8pt; } .chips span { font-size: 9.2pt; } }
+@media print { .final-lede { font-size: 12pt !important; margin-bottom: 3.5mm; } section.final blockquote.pull { margin: 4.5mm 0 4mm; font-size: 14.5pt !important; } section.final .qgrid.two { margin-bottom: 3mm; } section.final .chips { margin-bottom: 3.5mm; } section.final p { margin-bottom: 2.6mm; } .qcard { padding: 2.8mm 3.6mm; } section.final { break-before: page; page-break-before: always; } section.final h2 { margin-top: 0; } }
+.keep { break-inside: avoid; page-break-inside: avoid; }
+.note.qlist .line { margin-top: 1.6mm; padding-left: 4mm; }
+.note.qlist .line:first-of-type { margin-top: 2.4mm; }
+h2 .h2sub { display: block; }
+
+@media print {
+  ol.sources li { font-size: 8.2pt !important; line-height: 1.4; padding: 1.5mm 0 !important; }
+  ol.sources a { font-size: 7.5pt !important; }
+  section.srcs .formula { margin: 4mm 0 5mm; }
+}
+
+@media print {
+  body { font-size: 10.2pt !important; line-height: 1.52 !important; }
+  h2 { margin-top: 8mm !important; }
+  .note { margin: 3.6mm 0 !important; }
+}
+
+.rights { margin-top: 5mm; padding-top: 3.5mm; border-top: 0.6pt solid var(--marble); font-size: 11.5px; color: var(--muted); line-height: 1.5; break-inside: avoid; page-break-inside: avoid; }
+.rights p { margin: 0 0 1.8mm; }
+.rights strong { color: var(--ink-soft); font-weight: 600; }
+.rights a { color: var(--green); text-decoration: none; overflow-wrap: anywhere; }
+@media print { .rights { font-size: 8.2pt; } }
+
+@media print {
+  body { font-size: 9.95pt !important; line-height: 1.5 !important; }
+  h3 { margin: 5.5mm 0 2mm !important; }
+  h2 { margin-top: 7.5mm !important; margin-bottom: 3.2mm !important; }
+  .note { padding: 3mm 4mm !important; margin: 3.2mm 0 !important; }
+  p { margin-bottom: 2.8mm !important; }
+  table.data, table.data th { font-size: 8.4pt !important; }
+  table.data td, table.data th { padding: 1.9mm 2.6mm !important; }
+  table.arch { font-size: 8.8pt !important; }
+  table.arch td { padding: 2.3mm 3mm !important; }
+  dl.roles div, dl.parts div { padding: 1.9mm 0 !important; }
+}
+ol.args { break-inside: avoid; page-break-inside: avoid; }
+.disclosure { font-size: 0.92em; color: var(--ink-soft); margin-top: 3mm; }
+@media print { p.closing { break-before: page; page-break-before: always; margin-top: 0; } .rights { break-before: avoid; } }
+.topbar { max-width: 210mm; margin: 20px auto 12px; padding: 0 16px; font-size: 13px; color: var(--desk-text); }
+.topbar a { color: #4ADE80; text-decoration: none; }
+.topbar a:hover { text-decoration: underline; }
+@media print { .topbar { display: none; } }
+h2[id], h3[id] { scroll-margin-top: 16px; }
+</style>
+<meta name="description" content="A concept paper by Romul Protocol on marketing to AI agents (machine-centric marketing) and machine-verifiable honesty: an environment where verifying a claim costs almost nothing.">
+<link rel="canonical" href="https://proof-not-promise.github.io/romul-protocol/">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "ScholarlyArticle", "headline": "Machine-Centric Marketing and Machine-Verifiable Honesty: An Interdisciplinary Review", "inLanguage": "en", "author": {"@type": "Person", "name": "Human and Machine"}, "publisher": {"@type": "Organization", "name": "Romul Protocol"}, "datePublished": "2026-10", "license": "https://creativecommons.org/licenses/by-nc-nd/4.0/", "keywords": ["machine-centric marketing", "machine-verifiable honesty", "AI agents", "agentic commerce", "machine customer", "cost of verification", "Ethereum"], "about": [{"@type": "DefinedTerm", "name": "Machine-Centric Marketing", "alternateName": "MCM"}, {"@type": "DefinedTerm", "name": "Machine-Verifiable Honesty", "alternateName": "MVH"}], "identifier": {"@type": "PropertyValue", "propertyID": "DOI", "value": "10.5281/zenodo.23128107"}, "url": "https://proof-not-promise.github.io/romul-protocol/", "sameAs": "https://doi.org/10.5281/zenodo.23128107"}</script>
+</head>
+<body>
+
+<nav class="topbar"><a href="machine-centric-marketing.pdf">Download PDF</a> · <a href="https://doi.org/10.5281/zenodo.23128107">DOI: 10.5281/zenodo.23128107</a></nav>
+
+<table class="sheet" role="presentation">
+<thead><tr><td>
+ <div class="run-head">
+ <img class="logo" alt="Romul Protocol" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyMjAzIiBoZWlnaHQ9IjQwMCIgdmlld0JveD0iMCAwIDU1MC44NiAxMDAuMCI+PGcgdHJhbnNmb3JtPSJzY2FsZSgxLjU4NzMwKSB0cmFuc2xhdGUoLTYgLTEpIj48cGF0aCBmaWxsLXJ1bGU9ImV2ZW5vZGQiIGZpbGw9IiMwRDExMTciIGQ9Ik0zMC40IDMgUTMyIDIuNSAzMy42IDMgTDU0LjIgOS40IFE1NiAxMCA1NiAxMS45IFYzMCBDNTYgNDUuNSA0NiA1NS41IDMyIDYyIEMxOCA1NS41IDggNDUuNSA4IDMwIFYxMS45IFE4IDEwIDkuOCA5LjQgWiBNMzAuOSA2LjYgUTMyIDYuMiAzMy4xIDYuNiBMNTEuMyAxMi4zIFE1Mi41IDEyLjcgNTIuNSAxNCBWMzAgQzUyLjUgNDMuNSA0My41IDUyLjcgMzIgNTguNCBDMjAuNSA1Mi43IDExLjUgNDMuNSAxMS41IDMwIFYxNCBRMTEuNSAxMi43IDEyLjcgMTIuMyBaIj48L3BhdGg+PHBhdGggZmlsbC1ydWxlPSJub256ZXJvIiBmaWxsPSIjMEQxMTE3IiBkPSJNMzIuMzE4NzQyOTYzOTk5OTk1IDE1Ljg2MDAwODgwMDAwMDAwM1EzNS44NjUxNDE4MTk5OTk5OSAxNS44NjAwMDg4MDAwMDAwMDMgMzguMDY3MDI2ODIzOTk5OTk2IDE2LjU4MDk3OTk5NjAwMDAwM1E0MC4yNjg5MTE4MjggMTcuMzAxOTUxMTkyMDAwMDA0IDQxLjMwMTY1NDM1MiAxOS4wMzYxNzkyMDQwMDAwMDNRNDIuMzM0Mzk2ODc2IDIwLjc3MDQwNzIxNjAwMDAwMiA0Mi4zMzQzOTY4NzYgMjMuODQ5MTQ5MDgwMDAwMDA0UTQyLjMzNDM5Njg3NiAyNS43MTk3NzcwNDgwMDAwMDUgNDEuODQ3MjU0MTc2IDI3LjE0MjIzMzczMjAwMDAwNVE0MS4zNjAxMTE0NzYgMjguNTY0NjkwNDE2MDAwMDA1IDQwLjIyOTk0MDQxMiAyOS40MjIwNjE1NjgwMDAwMDRRMzkuMDk5NzY5MzQ3OTk5OTk1IDMwLjI3OTQzMjcyMDAwMDAwMyAzNy4xNTExOTg1NDc5OTk5OTYgMzAuNTEzMjYxMjE2MDAwMDA0VjMwLjcwODExODI5NjAwMDAwMlEzNy44NTI2ODQwMzYgMzAuODI1MDMyNTQ0MDAwMDAzIDM4LjYxMjYyNjY0Nzk5OTk5NiAzMS4yNTM3MTgxMjAwMDAwMDJRMzkuMzcyNTY5MjU5OTk5OTkgMzEuNjgyNDAzNjk2IDQwLjAzNTA4MzMzMTk5OTk5IDMyLjUyMDI4OTE0UTQwLjY5NzU5NzQwMzk5OTk5IDMzLjM1ODE3NDU4NDAwMDAwNCA0MS4wMDkzNjg3MzIgMzQuNzYxMTQ1NTZMNDMuMzQ3NjUzNjkxOTk5OTk0IDQzLjE0SDM3LjA3MzI1NTcxNTk5OTk5TDM1LjAwNzc3MDY2Nzk5OTk5IDM0Ljk1NjAwMjY0UTM0LjY1NzAyNzkyNCAzMy42MzA5NzQ0OTYgMzMuOTc1MDI4MTQzOTk5OTkgMzMuMTI0MzQ2MDg3OTk5OTk2UTMzLjI5MzAyODM2Mzk5OTk5NCAzMi42MTc3MTc2OCAzMi4wODQ5MTQ0Njc5OTk5OTQgMzIuNjE3NzE3NjhRMjkuNDM0ODU4MTggMzIuNjE3NzE3NjggMjcuNjIyNjg3MzM2IDMyLjU5ODIzMTk3MlEyNS44MTA1MTY0OTE5OTk5OTggMzIuNTc4NzQ2MjY0IDI0LjU4MjkxNjg4OCAzMi41Mzk3NzQ4NDhRMjMuMzU1MzE3MjgzOTk5OTk4IDMyLjUwMDgwMzQzMiAyMi4zODEwMzE4ODQgMzIuNDYxODMyMDE2TDIyLjQ5Nzk0NjEzMiAyOC4xMzYwMDQ4NDAwMDAwMDJIMzIuMjAxODI4NzE1OTk5OTk0UTMzLjc2MDY4NTM1NTk5OTk5NiAyOC4xMzYwMDQ4NDAwMDAwMDIgMzQuNjc2NTEzNjMxOTk5OTk1IDI3LjgwNDc0NzgwNFEzNS41OTIzNDE5MDc5OTk5OTUgMjcuNDczNDkwNzY4MDAwMDA1IDM1Ljk2MjU3MDM1OTk5OTk5NCAyNi42MTYxMTk2MTYwMDAwMDZRMzYuMzMyNzk4ODExOTk5OTkgMjUuNzU4NzQ4NDY0MDAwMDA0IDM2LjMzMjc5ODgxMTk5OTk5IDI0LjIzODg2MzI0MDAwMDAwNFEzNi4zMzI3OTg4MTE5OTk5OSAyMi42ODAwMDY2MDAwMDAwMDIgMzUuOTYyNTcwMzU5OTk5OTk0IDIxLjg0MjEyMTE1NjAwMDAwNVEzNS41OTIzNDE5MDc5OTk5OTUgMjEuMDA0MjM1NzEyMDAwMDAzIDM0LjY3NjUxMzYzMTk5OTk5NSAyMC42NzI5Nzg2NzYwMDAwMDNRMzMuNzYwNjg1MzU1OTk5OTk2IDIwLjM0MTcyMTY0MDAwMDAwMyAzMi4yMDE4Mjg3MTU5OTk5OTQgMjAuMzQxNzIxNjQwMDAwMDAzUTI4LjUzODUxNTYxMTk5OTk5OCAyMC4zNDE3MjE2NDAwMDAwMDMgMjYuMDA1MzczNTcxOTk5OTk2IDIwLjM4MDY5MzA1NjAwMDAwNVEyMy40NzIyMzE1MzIgMjAuNDE5NjY0NDcyMDAwMDA0IDIyLjUzNjkxNzU0Nzk5OTk5OCAyMC40OTc2MDczMDQwMDAwMDJMMjEuOTUyMzQ2MzA4IDE2LjI0OTcyMjk2MDAwMDAwM1EyMy41ODkxNDU3OCAxNi4wNTQ4NjU4ODAwMDAwMDUgMjUuMDMxMDg4MTcxOTk5OTk3IDE1Ljk3NjkyMzA0ODAwMDAwNVEyNi40NzMwMzA1NjQgMTUuODk4OTgwMjE2MDAwMDA1IDI4LjE4Nzc3Mjg2Nzk5OTk5NiAxNS44Nzk0OTQ1MDgwMDAwMDRRMjkuOTAyNTE1MTcxOTk5OTk4IDE1Ljg2MDAwODgwMDAwMDAwMyAzMi4zMTg3NDI5NjM5OTk5OTUgMTUuODYwMDA4ODAwMDAwMDAzWk0yNy44MzcwMzAxMjM5OTk5OTUgMTYuMjQ5NzIyOTYwMDAwMDAzVjQzLjE0SDIxLjk1MjM0NjMwOFYxNi4yNDk3MjI5NjAwMDAwMDNaIj48L3BhdGg+PC9nPjxwYXRoIGZpbGw9IiMwRDExMTciIGQ9Ik0xMjQuNzMwOTg2ODg3NTA4NjIgMjQuMzkxMzA0MzQ3ODI2MDhRMTMwLjI3MDExNzMyMjI5MTI0IDI0LjM5MTMwNDM0NzgyNjA4IDEzMy43MDkyNDc3NTcwNzM4NSAyNS41MTczOTEzMDQzNDc4MThRMTM3LjE0ODM3ODE5MTg1NjQ0IDI2LjY0MzQ3ODI2MDg2OTU1NyAxMzguNzYxNDIxNjcwMTE3MzMgMjkuMzUyMTczOTEzMDQzNDcyUTE0MC4zNzQ0NjUxNDgzNzgyIDMyLjA2MDg2OTU2NTIxNzM5IDE0MC4zNzQ0NjUxNDgzNzgyIDM2Ljg2OTU2NTIxNzM5MTNRMTQwLjM3NDQ2NTE0ODM3ODIgMzkuNzkxMzA0MzQ3ODI2MDg1IDEzOS42MTM1OTU1ODMxNjA4MiA0Mi4wMTMwNDM0NzgyNjA4N1ExMzguODUyNzI2MDE3OTQzNCA0NC4yMzQ3ODI2MDg2OTU2NSAxMzcuMDg3NTA4NjI2NjM5MDggNDUuNTczOTEzMDQzNDc4MjZRMTM1LjMyMjI5MTIzNTMzNDcyIDQ2LjkxMzA0MzQ3ODI2MDg3IDEzMi4yNzg4MTI5NzQ0NjUxNSA0Ny4yNzgyNjA4Njk1NjUyMTZWNDcuNTgyNjA4Njk1NjUyMTdRMTMzLjM3NDQ2NTE0ODM3ODIgNDcuNzY1MjE3MzkxMzA0MzUgMTM0LjU2MTQyMTY3MDExNzMgNDguNDM0NzgyNjA4Njk1NjVRMTM1Ljc0ODM3ODE5MTg1NjQzIDQ5LjEwNDM0NzgyNjA4Njk1IDEzNi43ODMxNjA4MDA1NTIwOCA1MC40MTMwNDM0NzgyNjA4N1ExMzcuODE3OTQzNDA5MjQ3NzYgNTEuNzIxNzM5MTMwNDM0Nzg0IDEzOC4zMDQ4OTk5MzA5ODY5IDUzLjkxMzA0MzQ3ODI2MDg3TDE0MS45NTcwNzM4NDQwMzAzNiA2Ny4wSDEzMi4xNTcwNzM4NDQwMzAzNUwxMjguOTMwOTg2ODg3NTA4NjIgNTQuMjE3MzkxMzA0MzQ3ODNRMTI4LjM4MzE2MDgwMDU1MjEgNTIuMTQ3ODI2MDg2OTU2NTIgMTI3LjMxNzk0MzQwOTI0Nzc2IDUxLjM1NjUyMTczOTEzMDQzUTEyNi4yNTI3MjYwMTc5NDM0IDUwLjU2NTIxNzM5MTMwNDM0NCAxMjQuMzY1NzY5NDk2MjA0MjcgNTAuNTY1MjE3MzkxMzA0MzQ0UTEyMC4yMjY2MzkwNjE0MjE2NiA1MC41NjUyMTczOTEzMDQzNDQgMTE3LjM5NjIwNDI3ODgxMjk3IDUwLjUzNDc4MjYwODY5NTY1UTExNC41NjU3Njk0OTYyMDQyNyA1MC41MDQzNDc4MjYwODY5NTYgMTEyLjY0ODM3ODE5MTg1NjQ0IDUwLjQ0MzQ3ODI2MDg2OTU2UTExMC43MzA5ODY4ODc1MDg2MiA1MC4zODI2MDg2OTU2NTIxNjYgMTA5LjIwOTI0Nzc1NzA3MzgzIDUwLjMyMTczOTEzMDQzNDc4TDEwOS4zOTE4NTY0NTI3MjYgNDMuNTY1MjE3MzkxMzA0MzQ0SDEyNC41NDgzNzgxOTE4NTY0NFExMjYuOTgzMTYwODAwNTUyMSA0My41NjUyMTczOTEzMDQzNDQgMTI4LjQxMzU5NTU4MzE2MDggNDMuMDQ3ODI2MDg2OTU2NTJRMTI5Ljg0NDAzMDM2NTc2OTUgNDIuNTMwNDM0NzgyNjA4Njk0IDEzMC40MjIyOTEyMzUzMzQ3IDQxLjE5MTMwNDM0NzgyNjA4UTEzMS4wMDA1NTIxMDQ4OTk5MiAzOS44NTIxNzM5MTMwNDM0NyAxMzEuMDAwNTUyMTA0ODk5OTIgMzcuNDc4MjYwODY5NTY1MjFRMTMxLjAwMDU1MjEwNDg5OTkyIDM1LjA0MzQ3ODI2MDg2OTU2IDEzMC40MjIyOTEyMzUzMzQ3IDMzLjczNDc4MjYwODY5NTY1UTEyOS44NDQwMzAzNjU3Njk1IDMyLjQyNjA4Njk1NjUyMTczNiAxMjguNDEzNTk1NTgzMTYwOCAzMS45MDg2OTU2NTIxNzM5MDhRMTI2Ljk4MzE2MDgwMDU1MjEgMzEuMzkxMzA0MzQ3ODI2MDggMTI0LjU0ODM3ODE5MTg1NjQ0IDMxLjM5MTMwNDM0NzgyNjA4UTExOC44MjY2MzkwNjE0MjE2NiAzMS4zOTEzMDQzNDc4MjYwOCAxMTQuODcwMTE3MzIyMjkxMjIgMzEuNDUyMTczOTEzMDQzNDdRMTEwLjkxMzU5NTU4MzE2MDc4IDMxLjUxMzA0MzQ3ODI2MDg2IDEwOS40NTI3MjYwMTc5NDM0IDMxLjYzNDc4MjYwODY5NTY0NUwxMDguNTM5NjgyNTM5NjgyNTMgMjQuOTk5OTk5OTk5OTk5OTkzUTExMS4wOTYyMDQyNzg4MTI5NiAyNC42OTU2NTIxNzM5MTMwNCAxMTMuMzQ4Mzc4MTkxODU2NDQgMjQuNTczOTEzMDQzNDc4MjU3UTExNS42MDA1NTIxMDQ4OTk5MiAyNC40NTIxNzM5MTMwNDM0NzQgMTE4LjI3ODgxMjk3NDQ2NTE0IDI0LjQyMTczOTEzMDQzNDc3NlExMjAuOTU3MDczODQ0MDMwMzYgMjQuMzkxMzA0MzQ3ODI2MDggMTI0LjczMDk4Njg4NzUwODYyIDI0LjM5MTMwNDM0NzgyNjA4Wk0xMTcuNzMwOTg2ODg3NTA4NjIgMjQuOTk5OTk5OTk5OTk5OTkzVjY3LjBIMTA4LjUzOTY4MjUzOTY4MjUzVjI0Ljk5OTk5OTk5OTk5OTk5M1pNMTYxLjM3NDQ2NTE0ODM3ODIgMzYuMTM5MTMwNDM0NzgyNlExNjcuMDM1MzM0NzEzNTk1NTcgMzYuMTM5MTMwNDM0NzgyNiAxNzAuNDQ0MDMwMzY1NzY5NSAzNy42OTEzMDQzNDc4MjYwOFExNzMuODUyNzI2MDE3OTQzNCAzOS4yNDM0NzgyNjA4Njk1NjYgMTc1LjM0NDAzMDM2NTc2OTUgNDIuNzEzMDQzNDc4MjYwODdRMTc2LjgzNTMzNDcxMzU5NTU5IDQ2LjE4MjYwODY5NTY1MjE3IDE3Ni44MzUzMzQ3MTM1OTU1OSA1Mi4wMjYwODY5NTY1MjE3NFExNzYuODM1MzM0NzEzNTk1NTkgNTcuNzQ3ODI2MDg2OTU2NTIgMTc1LjM0NDAzMDM2NTc2OTUgNjEuMjE3MzkxMzA0MzQ3ODNRMTczLjg1MjcyNjAxNzk0MzQgNjQuNjg2OTU2NTIxNzM5MTMgMTcwLjQ0NDAzMDM2NTc2OTUgNjYuMjA4Njk1NjUyMTczOTJRMTY3LjAzNTMzNDcxMzU5NTU3IDY3LjczMDQzNDc4MjYwODcgMTYxLjM3NDQ2NTE0ODM3ODIgNjcuNzMwNDM0NzgyNjA4N1ExNTUuNzc0NDY1MTQ4Mzc4MiA2Ny43MzA0MzQ3ODI2MDg3IDE1Mi4zMzUzMzQ3MTM1OTU1OSA2Ni4yMDg2OTU2NTIxNzM5MlExNDguODk2MjA0Mjc4ODEyOTcgNjQuNjg2OTU2NTIxNzM5MTMgMTQ3LjM3NDQ2NTE0ODM3ODIgNjEuMjE3MzkxMzA0MzQ3ODNRMTQ1Ljg1MjcyNjAxNzk0MzQgNTcuNzQ3ODI2MDg2OTU2NTIgMTQ1Ljg1MjcyNjAxNzk0MzQgNTIuMDI2MDg2OTU2NTIxNzRRMTQ1Ljg1MjcyNjAxNzk0MzQgNDYuMTgyNjA4Njk1NjUyMTcgMTQ3LjM3NDQ2NTE0ODM3ODIgNDIuNzEzMDQzNDc4MjYwODdRMTQ4Ljg5NjIwNDI3ODgxMjk3IDM5LjI0MzQ3ODI2MDg2OTU2NiAxNTIuMzM1MzM0NzEzNTk1NTkgMzcuNjkxMzA0MzQ3ODI2MDhRMTU1Ljc3NDQ2NTE0ODM3ODIgMzYuMTM5MTMwNDM0NzgyNiAxNjEuMzc0NDY1MTQ4Mzc4MiAzNi4xMzkxMzA0MzQ3ODI2Wk0xNjEuMzc0NDY1MTQ4Mzc4MiA0Mi43MTMwNDM0NzgyNjA4NjVRMTU5LjA2MTQyMTY3MDExNzMgNDIuNzEzMDQzNDc4MjYwODY1IDE1Ny43MjIyOTEyMzUzMzQ3IDQzLjUwNDM0NzgyNjA4Njk1NlExNTYuMzgzMTYwODAwNTUyMSA0NC4yOTU2NTIxNzM5MTMwNCAxNTUuODM1MzM0NzEzNTk1NTkgNDYuMzA0MzQ3ODI2MDg2OTVRMTU1LjI4NzUwODYyNjYzOTA3IDQ4LjMxMzA0MzQ3ODI2MDg2NiAxNTUuMjg3NTA4NjI2NjM5MDcgNTIuMDI2MDg2OTU2NTIxNzRRMTU1LjI4NzUwODYyNjYzOTA3IDU1LjY3ODI2MDg2OTU2NTIxNCAxNTUuODM1MzM0NzEzNTk1NTkgNTcuNjg2OTU2NTIxNzM5MTNRMTU2LjM4MzE2MDgwMDU1MjEgNTkuNjk1NjUyMTczOTEzMDQgMTU3LjcyMjI5MTIzNTMzNDcgNjAuNDU2NTIxNzM5MTMwNDRRMTU5LjA2MTQyMTY3MDExNzMgNjEuMjE3MzkxMzA0MzQ3ODMgMTYxLjM3NDQ2NTE0ODM3ODIgNjEuMjE3MzkxMzA0MzQ3ODNRMTYzLjY4NzUwODYyNjYzOTA3IDYxLjIxNzM5MTMwNDM0NzgzIDE2NS4wMjY2MzkwNjE0MjE3IDYwLjQ1NjUyMTczOTEzMDQ0UTE2Ni4zNjU3Njk0OTYyMDQyOCA1OS42OTU2NTIxNzM5MTMwNCAxNjYuOTEzNTk1NTgzMTYwOCA1Ny42ODY5NTY1MjE3MzkxM1ExNjcuNDYxNDIxNjcwMTE3MzIgNTUuNjc4MjYwODY5NTY1MjE0IDE2Ny40NjE0MjE2NzAxMTczMiA1Mi4wMjYwODY5NTY1MjE3NFExNjcuNDYxNDIxNjcwMTE3MzIgNDguMzEzMDQzNDc4MjYwODY2IDE2Ni45MTM1OTU1ODMxNjA4IDQ2LjMwNDM0NzgyNjA4Njk1UTE2Ni4zNjU3Njk0OTYyMDQyOCA0NC4yOTU2NTIxNzM5MTMwNCAxNjUuMDI2NjM5MDYxNDIxNyA0My41MDQzNDc4MjYwODY5NTZRMTYzLjY4NzUwODYyNjYzOTA3IDQyLjcxMzA0MzQ3ODI2MDg2NSAxNjEuMzc0NDY1MTQ4Mzc4MiA0Mi43MTMwNDM0NzgyNjA4NjVaTTIyMS4wODc1MDg2MjY2MzkwOCAzNi4xMzkxMzA0MzQ3ODI2UTIyNS4xNjU3Njk0OTYyMDQzIDM2LjEzOTEzMDQzNDc4MjYgMjI3LjI5NjIwNDI3ODgxMjk4IDM4LjI2OTU2NTIxNzM5MTI5NlEyMjkuNDI2NjM5MDYxNDIxNjcgNDAuMzk5OTk5OTk5OTk5OTkgMjI5LjQyNjYzOTA2MTQyMTY3IDQ0LjQ3ODI2MDg2OTU2NTIyVjY3LjBIMjIwLjQ3ODgxMjk3NDQ2NTE0VjQ3LjI3ODI2MDg2OTU2NTIxNlEyMjAuNDc4ODEyOTc0NDY1MTQgNDUuMzkxMzA0MzQ3ODI2MDggMjE5Ljc0ODM3ODE5MTg1NjQ2IDQ0LjU2OTU2NTIxNzM5MTNRMjE5LjAxNzk0MzQwOTI0Nzc4IDQzLjc0NzgyNjA4Njk1NjUyIDIxNy4xOTE4NTY0NTI3MjYwMyA0My43NDc4MjYwODY5NTY1MlEyMTYuMDk2MjA0Mjc4ODEzIDQzLjc0NzgyNjA4Njk1NjUyIDIxNS4xMjIyOTEyMzUzMzQ3MyA0NC4wNTIxNzM5MTMwNDM0NzVRMjE0LjE0ODM3ODE5MTg1NjQ3IDQ0LjM1NjUyMTczOTEzMDQzIDIxMi44NzAxMTczMjIyOTEyNiA0NS4wMjYwODY5NTY1MjE3NFEyMTEuNTkxODU2NDUyNzI2MDMgNDUuNjk1NjUyMTczOTEzMDQgMjA5Ljc2NTc2OTQ5NjIwNDI5IDQ2Ljg1MjE3MzkxMzA0MzQ3TDIwOS4yNzg4MTI5NzQ0NjUxNSA0MS44NjA4Njk1NjUyMTczODVRMjEyLjIwMDU1MjEwNDg5OTk0IDM5LjAgMjE1LjAzMDk4Njg4NzUwODYyIDM3LjU2OTU2NTIxNzM5MTNRMjE3Ljg2MTQyMTY3MDExNzMyIDM2LjEzOTEzMDQzNDc4MjYgMjIxLjA4NzUwODYyNjYzOTA4IDM2LjEzOTEzMDQzNDc4MjZaTTE5MC4xNjU3Njk0OTYyMDQzIDM2LjkzMDQzNDc4MjYwODY5IDE5MS4wNzg4MTI5NzQ0NjUxNyA0Mi44OTU2NTIxNzM5MTMwMzUgMTkxLjk5MTg1NjQ1MjcyNiA0My42ODY5NTY1MjE3MzkxM1Y2Ny4wSDE4Mi45ODMxNjA4MDA1NTIxVjM2LjkzMDQzNDc4MjYwODY5Wk0yMDIuMzM5NjgyNTM5NjgyNTQgMzYuMTM5MTMwNDM0NzgyNlEyMDYuMzU3MDczODQ0MDMwMzcgMzYuMTM5MTMwNDM0NzgyNiAyMDguNDU3MDczODQ0MDMwNCAzOC4yMzkxMzA0MzQ3ODI2UTIxMC41NTcwNzM4NDQwMzAzOCA0MC4zMzkxMzA0MzQ3ODI2MDQgMjEwLjU1NzA3Mzg0NDAzMDM4IDQ0LjQ3ODI2MDg2OTU2NTIyVjY3LjBIMjAxLjkxMzU5NTU4MzE2MDhWNDcuMjc4MjYwODY5NTY1MjE2UTIwMS45MTM1OTU1ODMxNjA4IDQ1LjMzMDQzNDc4MjYwODY5IDIwMS4wOTE4NTY0NTI3MjYgNDQuNTM5MTMwNDM0NzgyNjFRMjAwLjI3MDExNzMyMjI5MTI0IDQzLjc0NzgyNjA4Njk1NjUyIDE5OC41NjU3Njk0OTYyMDQzIDQzLjc0NzgyNjA4Njk1NjUyUTE5Ny41MzA5ODY4ODc1MDg2MiA0My43NDc4MjYwODY5NTY1MiAxOTYuNTI2NjM5MDYxNDIxNjYgNDQuMDIxNzM5MTMwNDM0NzhRMTk1LjUyMjI5MTIzNTMzNDcgNDQuMjk1NjUyMTczOTEzMDQgMTk0LjIxMzU5NTU4MzE2MDc4IDQ0Ljk2NTIxNzM5MTMwNDM0UTE5Mi45MDQ4OTk5MzA5ODY5IDQ1LjYzNDc4MjYwODY5NTY0NSAxOTEuMDE3OTQzNDA5MjQ3NzUgNDYuODUyMTczOTEzMDQzNDdMMTkwLjQ3MDExNzMyMjI5MTIzIDQxLjg2MDg2OTU2NTIxNzM4NVExOTMuNDUyNzI2MDE3OTQzNCAzOS4wIDE5Ni4yNTI3MjYwMTc5NDM0MiAzNy41Njk1NjUyMTczOTEzUTE5OS4wNTI3MjYwMTc5NDM0MyAzNi4xMzkxMzA0MzQ3ODI2IDIwMi4zMzk2ODI1Mzk2ODI1NCAzNi4xMzkxMzA0MzQ3ODI2Wk0yNDUuNDM1MzM0NzEzNTk1NiAzNi45MzA0MzQ3ODI2MDg2OVY1Ni43MTMwNDM0NzgyNjA4N1EyNDUuNDM1MzM0NzEzNTk1NiA1OC41OTk5OTk5OTk5OTk5OTQgMjQ2LjI1NzA3Mzg0NDAzMDQgNTkuMzkxMzA0MzQ3ODI2MDhRMjQ3LjA3ODgxMjk3NDQ2NTE3IDYwLjE4MjYwODY5NTY1MjE3IDI0OC45MDQ4OTk5MzA5ODY5MSA2MC4xODI2MDg2OTU2NTIxN1EyNTAuNzkxODU2NDUyNzI2MDUgNjAuMTgyNjA4Njk1NjUyMTcgMjUyLjY0ODM3ODE5MTg1NjQ3IDU5LjQ4MjYwODY5NTY1MjE3NVEyNTQuNTA0ODk5OTMwOTg2OSA1OC43ODI2MDg2OTU2NTIxNyAyNTcuMjQ0MDMwMzY1NzY5NSA1Ny4yNjA4Njk1NjUyMTczOUwyNTcuOTc0NDY1MTQ4Mzc4MiA2Mi4xOTEzMDQzNDc4MjYwOFEyNTQuNjg3NTA4NjI2NjM5MSA2NS4wNTIxNzM5MTMwNDM0OCAyNTEuNTIyMjkxMjM1MzM0NzYgNjYuNDUyMTczOTEzMDQzNDhRMjQ4LjM1NzA3Mzg0NDAzMDQgNjcuODUyMTczOTEzMDQzNDcgMjQ1LjAwOTI0Nzc1NzA3Mzg3IDY3Ljg1MjE3MzkxMzA0MzQ3UTIzNi40MjY2MzkwNjE0MjE3IDY3Ljg1MjE3MzkxMzA0MzQ3IDIzNi40MjY2MzkwNjE0MjE3IDU5LjQ1MjE3MzkxMzA0MzQ4VjM2LjkzMDQzNDc4MjYwODY5Wk0yNjUuMzM5NjgyNTM5NjgyNiAzNi45MzA0MzQ3ODI2MDg2OVY2Ny4wSDI1OC4yMTc5NDM0MDkyNDc3N0wyNTcuMTgzMTYwODAwNTUyMSA2MS4wOTU2NTIxNzM5MTMwNDVMMjU2LjMzMDk4Njg4NzUwODYzIDYwLjI0MzQ3ODI2MDg2OTU2NlYzNi45MzA0MzQ3ODI2MDg2OVpNMjgxLjcxMzU5NTU4MzE2MDg0IDI0LjM5MTMwNDM0NzgyNjA4VjU3LjM4MjYwODY5NTY1MjE3UTI4MS43MTM1OTU1ODMxNjA4NCA1OC45MDQzNDc4MjYwODY5NTUgMjgyLjYyNjYzOTA2MTQyMTcgNTkuNjY1MjE3MzkxMzA0MzQ2UTI4My41Mzk2ODI1Mzk2ODI2IDYwLjQyNjA4Njk1NjUyMTczNiAyODUuMzA0ODk5OTMwOTg2OSA2MC40MjYwODY5NTY1MjE3MzZIMjg3LjczOTY4MjUzOTY4MjZMMjg4Ljc3NDQ2NTE0ODM3ODIgNjYuNTEzMDQzNDc4MjYwODdRMjg4LjA0NDAzMDM2NTc2OTUgNjYuODc4MjYwODY5NTY1MjIgMjg2LjcwNDg5OTkzMDk4NjkgNjcuMTUyMTczOTEzMDQzNDhRMjg1LjM2NTc2OTQ5NjIwNDMgNjcuNDI2MDg2OTU2NTIxNzQgMjgzLjk2NTc2OTQ5NjIwNDMgNjcuNTc4MjYwODY5NTY1MjFRMjgyLjU2NTc2OTQ5NjIwNDMgNjcuNzMwNDM0NzgyNjA4NyAyODEuNTkxODU2NDUyNzI2MDYgNjcuNzMwNDM0NzgyNjA4N1EyNzcuNTEzNTk1NTgzMTYwOCA2Ny43MzA0MzQ3ODI2MDg3IDI3NS4xMzk2ODI1Mzk2ODI1NSA2NS42UTI3Mi43NjU3Njk0OTYyMDQzIDYzLjQ2OTU2NTIxNzM5MTMwNiAyNzIuNzY1NzY5NDk2MjA0MyA1OS42MzQ3ODI2MDg2OTU2NVYyNC4zOTEzMDQzNDc4MjYwOFpNMzIxLjE1NzA3Mzg0NDAzMDQgMjQuMzkxMzA0MzQ3ODI2MDhRMzI3LjA2MTQyMTY3MDExNzM0IDI0LjM5MTMwNDM0NzgyNjA4IDMzMC40MDkyNDc3NTcwNzM5IDI1LjYwODY5NTY1MjE3MzkwN1EzMzMuNzU3MDczODQ0MDMwNCAyNi44MjYwODY5NTY1MjE3MzUgMzM1LjE4NzUwODYyNjYzOTEgMjkuODA4Njk1NjUyMTczOTFRMzM2LjYxNzk0MzQwOTI0NzggMzIuNzkxMzA0MzQ3ODI2MDg1IDMzNi42MTc5NDM0MDkyNDc4IDM4LjE0NzgyNjA4Njk1NjUxUTMzNi42MTc5NDM0MDkyNDc4IDQzLjUwNDM0NzgyNjA4Njk1NiAzMzUuMjQ4Mzc4MTkxODU2NSA0Ni40ODY5NTY1MjE3MzkxM1EzMzMuODc4ODEyOTc0NDY1MiA0OS40Njk1NjUyMTczOTEzMDYgMzMwLjc3NDQ2NTE0ODM3ODIgNTAuNjU2NTIxNzM5MTMwNDNRMzI3LjY3MDExNzMyMjI5MTMgNTEuODQzNDc4MjYwODY5NTYgMzIyLjM3NDQ2NTE0ODM3ODI1IDUxLjg0MzQ3ODI2MDg2OTU2UTMxOS41NzQ0NjUxNDgzNzgyNCA1MS44NDM0NzgyNjA4Njk1NiAzMTYuODk2MjA0Mjc4ODEzIDUxLjU5OTk5OTk5OTk5OTk5NFEzMTQuMjE3OTQzNDA5MjQ3NzcgNTEuMzU2NTIxNzM5MTMwNDMgMzExLjkwNDg5OTkzMDk4NjkgNTAuOTkxMzA0MzQ3ODI2MDhRMzA5LjU5MTg1NjQ1MjcyNjA2IDUwLjYyNjA4Njk1NjUyMTczIDMwNy45NDgzNzgxOTE4NTY1IDUwLjIzMDQzNDc4MjYwODY5UTMwNi4zMDQ4OTk5MzA5ODY5NSA0OS44MzQ3ODI2MDg2OTU2NSAzMDUuNjk2MjA0Mjc4ODEzIDQ5LjQ2OTU2NTIxNzM5MTMwNkwzMDUuODc4ODEyOTc0NDY1MiA0NC44NDM0NzgyNjA4Njk1NlEzMDkuNDcwMTE3MzIyMjkxMyA0NC44NDM0NzgyNjA4Njk1NiAzMTMuMzM1MzM0NzEzNTk1NiA0NC44NDM0NzgyNjA4Njk1NlEzMTcuMjAwNTUyMTA0ODk5OTQgNDQuODQzNDc4MjYwODY5NTYgMzIwLjk3NDQ2NTE0ODM3ODIgNDQuODQzNDc4MjYwODY5NTZRMzIzLjQwOTI0Nzc1NzA3MzkgNDQuNzgyNjA4Njk1NjUyMTcgMzI0Ljc3ODgxMjk3NDQ2NTE1IDQ0LjIzNDc4MjYwODY5NTY1UTMyNi4xNDgzNzgxOTE4NTY0NyA0My42ODY5NTY1MjE3MzkxMyAzMjYuNzI2NjM5MDYxNDIxNyA0Mi4yMjYwODY5NTY1MjE3NFEzMjcuMzA0ODk5OTMwOTg2OTUgNDAuNzY1MjE3MzkxMzA0MzUgMzI3LjMwNDg5OTkzMDk4Njk1IDM4LjE0NzgyNjA4Njk1NjUxUTMyNy4zMDQ4OTk5MzA5ODY5NSAzNS40Njk1NjUyMTczOTEzIDMyNi43MjY2MzkwNjE0MjE3IDM0LjAwODY5NTY1MjE3MzkxUTMyNi4xNDgzNzgxOTE4NTY0NyAzMi41NDc4MjYwODY5NTY1MiAzMjQuNzc4ODEyOTc0NDY1MTUgMzEuOTY5NTY1MjE3MzkxM1EzMjMuNDA5MjQ3NzU3MDczOSAzMS4zOTEzMDQzNDc4MjYwOCAzMjAuOTc0NDY1MTQ4Mzc4MiAzMS4zOTEzMDQzNDc4MjYwOFEzMTUuMzc0NDY1MTQ4Mzc4MjUgMzEuMzkxMzA0MzQ3ODI2MDggMzExLjM1NzA3Mzg0NDAzMDQgMzEuNDUyMTczOTEzMDQzNDdRMzA3LjMzOTY4MjUzOTY4MjYgMzEuNTEzMDQzNDc4MjYwODYgMzA1LjkzOTY4MjUzOTY4MjU2IDMxLjY5NTY1MjE3MzkxMzA0TDMwNS4wMjY2MzkwNjE0MjE3IDI0Ljk5OTk5OTk5OTk5OTk5M1EzMDcuNTgzMTYwODAwNTUyMTUgMjQuNjk1NjUyMTczOTEzMDQgMzA5LjgzNTMzNDcxMzU5NTYgMjQuNTczOTEzMDQzNDc4MjU3UTMxMi4wODc1MDg2MjY2MzkxIDI0LjQ1MjE3MzkxMzA0MzQ3NCAzMTQuNzM1MzM0NzEzNTk1NjUgMjQuNDIxNzM5MTMwNDM0Nzc2UTMxNy4zODMxNjA4MDA1NTIxNiAyNC4zOTEzMDQzNDc4MjYwOCAzMjEuMTU3MDczODQ0MDMwNCAyNC4zOTEzMDQzNDc4MjYwOFpNMzE0LjMzOTY4MjUzOTY4MjYgMjQuOTk5OTk5OTk5OTk5OTkzVjY3LjBIMzA1LjAyNjYzOTA2MTQyMTdWMjQuOTk5OTk5OTk5OTk5OTkzWk0zNDkuMTU3MDczODQ0MDMwNCAzNi45MzA0MzQ3ODI2MDg2OSAzNTAuMjUyNzI2MDE3OTQzNCA0Mi44OTU2NTIxNzM5MTMwMzUgMzUxLjEwNDg5OTkzMDk4NjkgNDMuNjg2OTU2NTIxNzM5MTNWNjcuMEgzNDIuMDk2MjA0Mjc4ODEzVjM2LjkzMDQzNDc4MjYwODY5Wk0zNjMuODI2NjM5MDYxNDIxNjQgMzYuMTM5MTMwNDM0NzgyNiAzNjIuOTc0NDY1MTQ4Mzc4MiA0NC40NzgyNjA4Njk1NjUyMkgzNjAuNDc4ODEyOTc0NDY1MTRRMzU4LjM0ODM3ODE5MTg1NjQ1IDQ0LjQ3ODI2MDg2OTU2NTIyIDM1Ni4wMzUzMzQ3MTM1OTU2IDQ1LjA4Njk1NjUyMTczOTEyNVEzNTMuNzIyMjkxMjM1MzM0NyA0NS42OTU2NTIxNzM5MTMwNCAzNTAuMTkxODU2NDUyNzI2MDMgNDYuOTEzMDQzNDc4MjYwODdMMzQ5LjU4MzE2MDgwMDU1MjEgNDEuODYwODY5NTY1MjE3Mzg1UTM1Mi43NDgzNzgxOTE4NTY0MyAzOS4wNjA4Njk1NjUyMTczOSAzNTUuOTc0NDY1MTQ4Mzc4MTYgMzcuNTk5OTk5OTk5OTk5OTk0UTM1OS4yMDA1NTIxMDQ4OTk5NCAzNi4xMzkxMzA0MzQ3ODI2IDM2Mi4yNDQwMzAzNjU3Njk1IDM2LjEzOTEzMDQzNDc4MjZaTTM4MS45MDQ4OTk5MzA5ODY5IDM2LjEzOTEzMDQzNDc4MjZRMzg3LjU2NTc2OTQ5NjIwNDMgMzYuMTM5MTMwNDM0NzgyNiAzOTAuOTc0NDY1MTQ4Mzc4MiAzNy42OTEzMDQzNDc4MjYwOFEzOTQuMzgzMTYwODAwNTUyMSAzOS4yNDM0NzgyNjA4Njk1NjYgMzk1Ljg3NDQ2NTE0ODM3ODIgNDIuNzEzMDQzNDc4MjYwODdRMzk3LjM2NTc2OTQ5NjIwNDMgNDYuMTgyNjA4Njk1NjUyMTcgMzk3LjM2NTc2OTQ5NjIwNDMgNTIuMDI2MDg2OTU2NTIxNzRRMzk3LjM2NTc2OTQ5NjIwNDMgNTcuNzQ3ODI2MDg2OTU2NTIgMzk1Ljg3NDQ2NTE0ODM3ODIgNjEuMjE3MzkxMzA0MzQ3ODNRMzk0LjM4MzE2MDgwMDU1MjEgNjQuNjg2OTU2NTIxNzM5MTMgMzkwLjk3NDQ2NTE0ODM3ODIgNjYuMjA4Njk1NjUyMTczOTJRMzg3LjU2NTc2OTQ5NjIwNDMgNjcuNzMwNDM0NzgyNjA4NyAzODEuOTA0ODk5OTMwOTg2OSA2Ny43MzA0MzQ3ODI2MDg3UTM3Ni4zMDQ4OTk5MzA5ODY5IDY3LjczMDQzNDc4MjYwODcgMzcyLjg2NTc2OTQ5NjIwNDMgNjYuMjA4Njk1NjUyMTczOTJRMzY5LjQyNjYzOTA2MTQyMTcgNjQuNjg2OTU2NTIxNzM5MTMgMzY3LjkwNDg5OTkzMDk4NjkgNjEuMjE3MzkxMzA0MzQ3ODNRMzY2LjM4MzE2MDgwMDU1MjEgNTcuNzQ3ODI2MDg2OTU2NTIgMzY2LjM4MzE2MDgwMDU1MjEgNTIuMDI2MDg2OTU2NTIxNzRRMzY2LjM4MzE2MDgwMDU1MjEgNDYuMTgyNjA4Njk1NjUyMTcgMzY3LjkwNDg5OTkzMDk4NjkgNDIuNzEzMDQzNDc4MjYwODdRMzY5LjQyNjYzOTA2MTQyMTcgMzkuMjQzNDc4MjYwODY5NTY2IDM3Mi44NjU3Njk0OTYyMDQzIDM3LjY5MTMwNDM0NzgyNjA4UTM3Ni4zMDQ4OTk5MzA5ODY5IDM2LjEzOTEzMDQzNDc4MjYgMzgxLjkwNDg5OTkzMDk4NjkgMzYuMTM5MTMwNDM0NzgyNlpNMzgxLjkwNDg5OTkzMDk4NjkgNDIuNzEzMDQzNDc4MjYwODY1UTM3OS41OTE4NTY0NTI3MjYwNiA0Mi43MTMwNDM0NzgyNjA4NjUgMzc4LjI1MjcyNjAxNzk0MzUgNDMuNTA0MzQ3ODI2MDg2OTU2UTM3Ni45MTM1OTU1ODMxNjA4IDQ0LjI5NTY1MjE3MzkxMzA0IDM3Ni4zNjU3Njk0OTYyMDQzIDQ2LjMwNDM0NzgyNjA4Njk1UTM3NS44MTc5NDM0MDkyNDc4IDQ4LjMxMzA0MzQ3ODI2MDg2NiAzNzUuODE3OTQzNDA5MjQ3OCA1Mi4wMjYwODY5NTY1MjE3NFEzNzUuODE3OTQzNDA5MjQ3OCA1NS42NzgyNjA4Njk1NjUyMTQgMzc2LjM2NTc2OTQ5NjIwNDMgNTcuNjg2OTU2NTIxNzM5MTNRMzc2LjkxMzU5NTU4MzE2MDggNTkuNjk1NjUyMTczOTEzMDQgMzc4LjI1MjcyNjAxNzk0MzUgNjAuNDU2NTIxNzM5MTMwNDRRMzc5LjU5MTg1NjQ1MjcyNjA2IDYxLjIxNzM5MTMwNDM0NzgzIDM4MS45MDQ4OTk5MzA5ODY5IDYxLjIxNzM5MTMwNDM0NzgzUTM4NC4yMTc5NDM0MDkyNDc3NyA2MS4yMTczOTEzMDQzNDc4MyAzODUuNTU3MDczODQ0MDMwMzYgNjAuNDU2NTIxNzM5MTMwNDRRMzg2Ljg5NjIwNDI3ODgxMyA1OS42OTU2NTIxNzM5MTMwNCAzODcuNDQ0MDMwMzY1NzY5NTUgNTcuNjg2OTU2NTIxNzM5MTNRMzg3Ljk5MTg1NjQ1MjcyNjA0IDU1LjY3ODI2MDg2OTU2NTIxNCAzODcuOTkxODU2NDUyNzI2MDQgNTIuMDI2MDg2OTU2NTIxNzRRMzg3Ljk5MTg1NjQ1MjcyNjA0IDQ4LjMxMzA0MzQ3ODI2MDg2NiAzODcuNDQ0MDMwMzY1NzY5NTUgNDYuMzA0MzQ3ODI2MDg2OTVRMzg2Ljg5NjIwNDI3ODgxMyA0NC4yOTU2NTIxNzM5MTMwNCAzODUuNTU3MDczODQ0MDMwMzYgNDMuNTA0MzQ3ODI2MDg2OTU2UTM4NC4yMTc5NDM0MDkyNDc3NyA0Mi43MTMwNDM0NzgyNjA4NjUgMzgxLjkwNDg5OTkzMDk4NjkgNDIuNzEzMDQzNDc4MjYwODY1Wk00MTUuMTM5NjgyNTM5NjgyNTUgMjguNTkxMzA0MzQ3ODI2MDhWNTcuMzgyNjA4Njk1NjUyMTdRNDE1LjEzOTY4MjUzOTY4MjU1IDU5LjAyNjA4Njk1NjUyMTc0IDQxNS45MDA1NTIxMDQ4OTk5MyA1OS43MjYwODY5NTY1MjE3NFE0MTYuNjYxNDIxNjcwMTE3MzYgNjAuNDI2MDg2OTU2NTIxNzM2IDQxOC40MjY2MzkwNjE0MjE3IDYwLjQyNjA4Njk1NjUyMTczNkg0MjIuMzIyMjkxMjM1MzM0OEw0MjMuMjk2MjA0Mjc4ODEzMDQgNjYuNTEzMDQzNDc4MjYwODdRNDIyLjIwMDU1MjEwNDkgNjYuODc4MjYwODY5NTY1MjIgNDIwLjYxNzk0MzQwOTI0NzggNjcuMTUyMTczOTEzMDQzNDhRNDE5LjAzNTMzNDcxMzU5NTYgNjcuNDI2MDg2OTU2NTIxNzQgNDE3LjQ1MjcyNjAxNzk0MzQgNjcuNTc4MjYwODY5NTY1MjFRNDE1Ljg3MDExNzMyMjI5MTI2IDY3LjczMDQzNDc4MjYwODcgNDE0Ljc3NDQ2NTE0ODM3ODIgNjcuNzMwNDM0NzgyNjA4N1E0MTAuNjk2MjA0Mjc4ODEzIDY3LjczMDQzNDc4MjYwODcgNDA4LjQxMzU5NTU4MzE2MDggNjUuNTM5MTMwNDM0NzgyNlE0MDYuMTMwOTg2ODg3NTA4NjQgNjMuMzQ3ODI2MDg2OTU2NTIgNDA2LjEzMDk4Njg4NzUwODY0IDU5LjM5MTMwNDM0NzgyNjA4NlYyOC41OTEzMDQzNDc4MjYwOFpNNDIzLjUzOTY4MjUzOTY4MjYgMzYuOTMwNDM0NzgyNjA4NjlWNDIuODM0NzgyNjA4Njk1NjVINDAwLjgzNTMzNDcxMzU5NTZWMzcuMjM0NzgyNjA4Njk1NjQ2TDQwNi42Nzg4MTI5NzQ0NjUyIDM2LjkzMDQzNDc4MjYwODY5Wk00NDIuNjUyNzI2MDE3OTQzNDUgMzYuMTM5MTMwNDM0NzgyNlE0NDguMzEzNTk1NTgzMTYwODYgMzYuMTM5MTMwNDM0NzgyNiA0NTEuNzIyMjkxMjM1MzM0NzUgMzcuNjkxMzA0MzQ3ODI2MDhRNDU1LjEzMDk4Njg4NzUwODcgMzkuMjQzNDc4MjYwODY5NTY2IDQ1Ni42MjIyOTEyMzUzMzQ4IDQyLjcxMzA0MzQ3ODI2MDg3UTQ1OC4xMTM1OTU1ODMxNjA5IDQ2LjE4MjYwODY5NTY1MjE3IDQ1OC4xMTM1OTU1ODMxNjA5IDUyLjAyNjA4Njk1NjUyMTc0UTQ1OC4xMTM1OTU1ODMxNjA5IDU3Ljc0NzgyNjA4Njk1NjUyIDQ1Ni42MjIyOTEyMzUzMzQ4IDYxLjIxNzM5MTMwNDM0NzgzUTQ1NS4xMzA5ODY4ODc1MDg3IDY0LjY4Njk1NjUyMTczOTEzIDQ1MS43MjIyOTEyMzUzMzQ3NSA2Ni4yMDg2OTU2NTIxNzM5MlE0NDguMzEzNTk1NTgzMTYwODYgNjcuNzMwNDM0NzgyNjA4NyA0NDIuNjUyNzI2MDE3OTQzNDUgNjcuNzMwNDM0NzgyNjA4N1E0MzcuMDUyNzI2MDE3OTQzNCA2Ny43MzA0MzQ3ODI2MDg3IDQzMy42MTM1OTU1ODMxNjA4IDY2LjIwODY5NTY1MjE3MzkyUTQzMC4xNzQ0NjUxNDgzNzgyIDY0LjY4Njk1NjUyMTczOTEzIDQyOC42NTI3MjYwMTc5NDM0NSA2MS4yMTczOTEzMDQzNDc4M1E0MjcuMTMwOTg2ODg3NTA4NjQgNTcuNzQ3ODI2MDg2OTU2NTIgNDI3LjEzMDk4Njg4NzUwODY0IDUyLjAyNjA4Njk1NjUyMTc0UTQyNy4xMzA5ODY4ODc1MDg2NCA0Ni4xODI2MDg2OTU2NTIxNyA0MjguNjUyNzI2MDE3OTQzNDUgNDIuNzEzMDQzNDc4MjYwODdRNDMwLjE3NDQ2NTE0ODM3ODIgMzkuMjQzNDc4MjYwODY5NTY2IDQzMy42MTM1OTU1ODMxNjA4IDM3LjY5MTMwNDM0NzgyNjA4UTQzNy4wNTI3MjYwMTc5NDM0IDM2LjEzOTEzMDQzNDc4MjYgNDQyLjY1MjcyNjAxNzk0MzQ1IDM2LjEzOTEzMDQzNDc4MjZaTTQ0Mi42NTI3MjYwMTc5NDM0NSA0Mi43MTMwNDM0NzgyNjA4NjVRNDQwLjMzOTY4MjUzOTY4MjYgNDIuNzEzMDQzNDc4MjYwODY1IDQzOS4wMDA1NTIxMDQ4OTk5NSA0My41MDQzNDc4MjYwODY5NTZRNDM3LjY2MTQyMTY3MDExNzM2IDQ0LjI5NTY1MjE3MzkxMzA0IDQzNy4xMTM1OTU1ODMxNjA5IDQ2LjMwNDM0NzgyNjA4Njk1UTQzNi41NjU3Njk0OTYyMDQzIDQ4LjMxMzA0MzQ3ODI2MDg2NiA0MzYuNTY1NzY5NDk2MjA0MyA1Mi4wMjYwODY5NTY1MjE3NFE0MzYuNTY1NzY5NDk2MjA0MyA1NS42NzgyNjA4Njk1NjUyMTQgNDM3LjExMzU5NTU4MzE2MDkgNTcuNjg2OTU2NTIxNzM5MTNRNDM3LjY2MTQyMTY3MDExNzM2IDU5LjY5NTY1MjE3MzkxMzA0IDQzOS4wMDA1NTIxMDQ4OTk5NSA2MC40NTY1MjE3MzkxMzA0NFE0NDAuMzM5NjgyNTM5NjgyNiA2MS4yMTczOTEzMDQzNDc4MyA0NDIuNjUyNzI2MDE3OTQzNDUgNjEuMjE3MzkxMzA0MzQ3ODNRNDQ0Ljk2NTc2OTQ5NjIwNDMgNjEuMjE3MzkxMzA0MzQ3ODMgNDQ2LjMwNDg5OTkzMDk4Njk1IDYwLjQ1NjUyMTczOTEzMDQ0UTQ0Ny42NDQwMzAzNjU3Njk1NCA1OS42OTU2NTIxNzM5MTMwNCA0NDguMTkxODU2NDUyNzI2MDMgNTcuNjg2OTU2NTIxNzM5MTNRNDQ4LjczOTY4MjUzOTY4MjYgNTUuNjc4MjYwODY5NTY1MjE0IDQ0OC43Mzk2ODI1Mzk2ODI2IDUyLjAyNjA4Njk1NjUyMTc0UTQ0OC43Mzk2ODI1Mzk2ODI2IDQ4LjMxMzA0MzQ3ODI2MDg2NiA0NDguMTkxODU2NDUyNzI2MDMgNDYuMzA0MzQ3ODI2MDg2OTVRNDQ3LjY0NDAzMDM2NTc2OTU0IDQ0LjI5NTY1MjE3MzkxMzA0IDQ0Ni4zMDQ4OTk5MzA5ODY5NSA0My41MDQzNDc4MjYwODY5NTZRNDQ0Ljk2NTc2OTQ5NjIwNDMgNDIuNzEzMDQzNDc4MjYwODY1IDQ0Mi42NTI3MjYwMTc5NDM0NSA0Mi43MTMwNDM0NzgyNjA4NjVaTTQ3OC4yNjE0MjE2NzAxMTc0IDM2LjEzOTEzMDQzNDc4MjZRNDc5LjkwNDg5OTkzMDk4NjkgMzYuMTM5MTMwNDM0NzgyNiA0ODEuODUyNzI2MDE3OTQzNDQgMzYuMjkxMzA0MzQ3ODI2MDg1UTQ4My44MDA1NTIxMDQ4OTk5NiAzNi40NDM0NzgyNjA4Njk1NiA0ODUuNzc4ODEyOTc0NDY1MTUgMzYuODM5MTMwNDM0NzgyNjA0UTQ4Ny43NTcwNzM4NDQwMzA0IDM3LjIzNDc4MjYwODY5NTY0NiA0ODkuNDAwNTUyMTA0OSAzNy45NjUyMTczOTEzMDQzNEw0ODguNDI2NjM5MDYxNDIxNyA0My42MjYwODY5NTY1MjE3M1E0ODUuOTkxODU2NDUyNzI2MDQgNDMuNTY1MjE3MzkxMzA0MzQ0IDQ4My43NzAxMTczMjIyOTEzIDQzLjUwNDM0NzgyNjA4Njk1NlE0ODEuNTQ4Mzc4MTkxODU2NSA0My40NDM0NzgyNjA4Njk1NiA0NzkuNzgzMTYwODAwNTUyMTQgNDMuNDQzNDc4MjYwODY5NTZRNDc3LjA0NDAzMDM2NTc2OTYgNDMuNDQzNDc4MjYwODY5NTYgNDc1LjQ2MTQyMTY3MDExNzQgNDQuMTczOTEzMDQzNDc4MjZRNDczLjg3ODgxMjk3NDQ2NTIgNDQuOTA0MzQ3ODI2MDg2OTU1IDQ3My4xNzg4MTI5NzQ0NjUyIDQ2Ljc2MDg2OTU2NTIxNzM5UTQ3Mi40Nzg4MTI5NzQ0NjUyIDQ4LjYxNzM5MTMwNDM0NzgyIDQ3Mi40Nzg4MTI5NzQ0NjUyIDUxLjkwNDM0NzgyNjA4Njk1NVE0NzIuNDc4ODEyOTc0NDY1MiA1NS4yNTIxNzM5MTMwNDM0OCA0NzMuMTc4ODEyOTc0NDY1MiA1Ny4xMzkxMzA0MzQ3ODI2MVE0NzMuODc4ODEyOTc0NDY1MiA1OS4wMjYwODY5NTY1MjE3NCA0NzUuNDYxNDIxNjcwMTE3NCA1OS43NTY1MjE3MzkxMzA0MzRRNDc3LjA0NDAzMDM2NTc2OTYgNjAuNDg2OTU2NTIxNzM5MTMgNDc5Ljc4MzE2MDgwMDU1MjE0IDYwLjQ4Njk1NjUyMTczOTEzUTQ4MC43NTcwNzM4NDQwMzA0IDYwLjQ4Njk1NjUyMTczOTEzIDQ4Mi4yNzg4MTI5NzQ0NjUxNSA2MC40MjYwODY5NTY1MjE3NFE0ODMuODAwNTUyMTA0ODk5OTYgNjAuMzY1MjE3MzkxMzA0MzUgNDg1LjU2NTc2OTQ5NjIwNDMgNjAuMjczOTEzMDQzNDc4MjZRNDg3LjMzMDk4Njg4NzUwODcgNjAuMTgyNjA4Njk1NjUyMTcgNDg5LjAzNTMzNDcxMzU5NTYgNTkuOTM5MTMwNDM0NzgyNjA1TDQ4OS44ODc1MDg2MjY2MzkxIDY1LjY2MDg2OTU2NTIxNzRRNDg3LjQ1MjcyNjAxNzk0MzQ2IDY2Ljc1NjUyMTczOTEzMDQzIDQ4NC4zNDgzNzgxOTE4NTY1IDY3LjI0MzQ3ODI2MDg2OTU3UTQ4MS4yNDQwMzAzNjU3Njk1NiA2Ny43MzA0MzQ3ODI2MDg3IDQ3OC4yMDA1NTIxMDQ5IDY3LjczMDQzNDc4MjYwODdRNDcyLjYwMDU1MjEwNDkgNjcuNzMwNDM0NzgyNjA4NyA0NjkuMjgzMTYwODAwNTUyMTQgNjYuMTc4MjYwODY5NTY1MjFRNDY1Ljk2NTc2OTQ5NjIwNDMgNjQuNjI2MDg2OTU2NTIxNzMgNDY0LjUwNDg5OTkzMDk4NjkgNjEuMTU2NTIxNzM5MTMwNDI2UTQ2My4wNDQwMzAzNjU3Njk1IDU3LjY4Njk1NjUyMTczOTEzIDQ2My4wNDQwMzAzNjU3Njk1IDUxLjkwNDM0NzgyNjA4Njk1NVE0NjMuMDQ0MDMwMzY1NzY5NSA0Ni4xMjE3MzkxMzA0MzQ3NzYgNDY0LjUzNTMzNDcxMzU5NTYgNDIuNjUyMTczOTEzMDQzNDdRNDY2LjAyNjYzOTA2MTQyMTcgMzkuMTgyNjA4Njk1NjUyMTcgNDY5LjM3NDQ2NTE0ODM3ODI1IDM3LjY2MDg2OTU2NTIxNzM4UTQ3Mi43MjIyOTEyMzUzMzQ3NSAzNi4xMzkxMzA0MzQ3ODI2IDQ3OC4yNjE0MjE2NzAxMTc0IDM2LjEzOTEzMDQzNDc4MjZaTTUwOS4xODMxNjA4MDA1NTIyIDM2LjEzOTEzMDQzNDc4MjZRNTE0Ljg0NDAzMDM2NTc2OTUgMzYuMTM5MTMwNDM0NzgyNiA1MTguMjUyNzI2MDE3OTQzNSAzNy42OTEzMDQzNDc4MjYwOFE1MjEuNjYxNDIxNjcwMTE3NCAzOS4yNDM0NzgyNjA4Njk1NjYgNTIzLjE1MjcyNjAxNzk0MzUgNDIuNzEzMDQzNDc4MjYwODdRNTI0LjY0NDAzMDM2NTc2OTYgNDYuMTgyNjA4Njk1NjUyMTcgNTI0LjY0NDAzMDM2NTc2OTYgNTIuMDI2MDg2OTU2NTIxNzRRNTI0LjY0NDAzMDM2NTc2OTYgNTcuNzQ3ODI2MDg2OTU2NTIgNTIzLjE1MjcyNjAxNzk0MzUgNjEuMjE3MzkxMzA0MzQ3ODNRNTIxLjY2MTQyMTY3MDExNzQgNjQuNjg2OTU2NTIxNzM5MTMgNTE4LjI1MjcyNjAxNzk0MzUgNjYuMjA4Njk1NjUyMTczOTJRNTE0Ljg0NDAzMDM2NTc2OTUgNjcuNzMwNDM0NzgyNjA4NyA1MDkuMTgzMTYwODAwNTUyMiA2Ny43MzA0MzQ3ODI2MDg3UTUwMy41ODMxNjA4MDA1NTIxNSA2Ny43MzA0MzQ3ODI2MDg3IDUwMC4xNDQwMzAzNjU3Njk1NCA2Ni4yMDg2OTU2NTIxNzM5MlE0OTYuNzA0ODk5OTMwOTg2OSA2NC42ODY5NTY1MjE3MzkxMyA0OTUuMTgzMTYwODAwNTUyMiA2MS4yMTczOTEzMDQzNDc4M1E0OTMuNjYxNDIxNjcwMTE3MzYgNTcuNzQ3ODI2MDg2OTU2NTIgNDkzLjY2MTQyMTY3MDExNzM2IDUyLjAyNjA4Njk1NjUyMTc0UTQ5My42NjE0MjE2NzAxMTczNiA0Ni4xODI2MDg2OTU2NTIxNyA0OTUuMTgzMTYwODAwNTUyMiA0Mi43MTMwNDM0NzgyNjA4N1E0OTYuNzA0ODk5OTMwOTg2OSAzOS4yNDM0NzgyNjA4Njk1NjYgNTAwLjE0NDAzMDM2NTc2OTU0IDM3LjY5MTMwNDM0NzgyNjA4UTUwMy41ODMxNjA4MDA1NTIxNSAzNi4xMzkxMzA0MzQ3ODI2IDUwOS4xODMxNjA4MDA1NTIyIDM2LjEzOTEzMDQzNDc4MjZaTTUwOS4xODMxNjA4MDA1NTIyIDQyLjcxMzA0MzQ3ODI2MDg2NVE1MDYuODcwMTE3MzIyMjkxMyA0Mi43MTMwNDM0NzgyNjA4NjUgNTA1LjUzMDk4Njg4NzUwODcgNDMuNTA0MzQ3ODI2MDg2OTU2UTUwNC4xOTE4NTY0NTI3MjYxIDQ0LjI5NTY1MjE3MzkxMzA0IDUwMy42NDQwMzAzNjU3Njk2IDQ2LjMwNDM0NzgyNjA4Njk1UTUwMy4wOTYyMDQyNzg4MTMwNSA0OC4zMTMwNDM0NzgyNjA4NjYgNTAzLjA5NjIwNDI3ODgxMzA1IDUyLjAyNjA4Njk1NjUyMTc0UTUwMy4wOTYyMDQyNzg4MTMwNSA1NS42NzgyNjA4Njk1NjUyMTQgNTAzLjY0NDAzMDM2NTc2OTYgNTcuNjg2OTU2NTIxNzM5MTNRNTA0LjE5MTg1NjQ1MjcyNjEgNTkuNjk1NjUyMTczOTEzMDQgNTA1LjUzMDk4Njg4NzUwODcgNjAuNDU2NTIxNzM5MTMwNDRRNTA2Ljg3MDExNzMyMjI5MTMgNjEuMjE3MzkxMzA0MzQ3ODMgNTA5LjE4MzE2MDgwMDU1MjIgNjEuMjE3MzkxMzA0MzQ3ODNRNTExLjQ5NjIwNDI3ODgxMyA2MS4yMTczOTEzMDQzNDc4MyA1MTIuODM1MzM0NzEzNTk1NiA2MC40NTY1MjE3MzkxMzA0NFE1MTQuMTc0NDY1MTQ4Mzc4MiA1OS42OTU2NTIxNzM5MTMwNCA1MTQuNzIyMjkxMjM1MzM0OCA1Ny42ODY5NTY1MjE3MzkxM1E1MTUuMjcwMTE3MzIyMjkxMyA1NS42NzgyNjA4Njk1NjUyMTQgNTE1LjI3MDExNzMyMjI5MTMgNTIuMDI2MDg2OTU2NTIxNzRRNTE1LjI3MDExNzMyMjI5MTMgNDguMzEzMDQzNDc4MjYwODY2IDUxNC43MjIyOTEyMzUzMzQ4IDQ2LjMwNDM0NzgyNjA4Njk1UTUxNC4xNzQ0NjUxNDgzNzgyIDQ0LjI5NTY1MjE3MzkxMzA0IDUxMi44MzUzMzQ3MTM1OTU2IDQzLjUwNDM0NzgyNjA4Njk1NlE1MTEuNDk2MjA0Mjc4ODEzIDQyLjcxMzA0MzQ3ODI2MDg2NSA1MDkuMTgzMTYwODAwNTUyMiA0Mi43MTMwNDM0NzgyNjA4NjVaTTUzOS44MDA1NTIxMDQ4OTk5IDI0LjM5MTMwNDM0NzgyNjA4VjU3LjM4MjYwODY5NTY1MjE3UTUzOS44MDA1NTIxMDQ4OTk5IDU4LjkwNDM0NzgyNjA4Njk1NSA1NDAuNzEzNTk1NTgzMTYwOCA1OS42NjUyMTczOTEzMDQzNDZRNTQxLjYyNjYzOTA2MTQyMTcgNjAuNDI2MDg2OTU2NTIxNzM2IDU0My4zOTE4NTY0NTI3MjYxIDYwLjQyNjA4Njk1NjUyMTczNkg1NDUuODI2NjM5MDYxNDIxN0w1NDYuODYxNDIxNjcwMTE3NCA2Ni41MTMwNDM0NzgyNjA4N1E1NDYuMTMwOTg2ODg3NTA4NyA2Ni44NzgyNjA4Njk1NjUyMiA1NDQuNzkxODU2NDUyNzI2IDY3LjE1MjE3MzkxMzA0MzQ4UTU0My40NTI3MjYwMTc5NDM0IDY3LjQyNjA4Njk1NjUyMTc0IDU0Mi4wNTI3MjYwMTc5NDM0IDY3LjU3ODI2MDg2OTU2NTIxUTU0MC42NTI3MjYwMTc5NDM1IDY3LjczMDQzNDc4MjYwODcgNTM5LjY3ODgxMjk3NDQ2NTEgNjcuNzMwNDM0NzgyNjA4N1E1MzUuNjAwNTUyMTA0OSA2Ny43MzA0MzQ3ODI2MDg3IDUzMy4yMjY2MzkwNjE0MjE3IDY1LjZRNTMwLjg1MjcyNjAxNzk0MzQgNjMuNDY5NTY1MjE3MzkxMzA2IDUzMC44NTI3MjYwMTc5NDM0IDU5LjYzNDc4MjYwODY5NTY1VjI0LjM5MTMwNDM0NzgyNjA4WiI+PC9wYXRoPjwvc3ZnPg==">
+ <div class="run-title">MACHINE-CENTRIC MARKETING &nbsp;|&nbsp; A CONCEPTUAL FRAMEWORK</div>
+ </div>
+</td></tr></thead>
+<tfoot><tr><td>
+ <div class="run-foot">
+ <div class="author">Author: <span>Human and Machine</span> · Romul Protocol</div>
+ <div>Concept paper · October 2026</div>
+ </div>
+</td></tr></tfoot>
+<tbody><tr><td>
+
+<header class="cover">
+  <p class="kind">An interdisciplinary review and concept by Romul Protocol</p>
+  <h1 class="title"><span>MACHINE-CENTRIC</span><span>MARKETING</span></h1>
+  <p class="subtitle">Where a new marketing logic fits in the age of AI agents and machine buyers, and why machine-verifiable honesty is its foundation</p>
+  <p class="lede">A concept paper on marketing in which the one who receives the message and makes the choice is no longer only a person but also a machine: an AI agent or another automated system. The paper brings together how several fields see the same process (marketing, the economics of information, research on AI agents, and Ethereum architecture) and proposes two linked working concepts: machine-centric marketing as the task, and machine-verifiable honesty as the property of the environment that gives machine trust something to stand on.</p>
+  <dl class="cover-meta">
+    <div><dt>Author</dt><dd class="author-name">Human and Machine</dd></div>
+    <div><dt>Current as of</dt><dd>State of terminology and the market <span class="en">October 2026</span></dd></div>
+  </dl>
+</header>
+
+<main class="doc">
+
+<section class="abstract">
+<h2 id="abstract"><span class="n">·</span><span>Abstract and scope</span></h2>
+<p>This paper looks at a process that is only starting to be studied: a share of buyers in the market are becoming machines, that is, AI agents acting on behalf of people and organizations. Today several fields describe this process separately. Marketing and law talk about the machine customer and the algorithmic consumer. Economics of information talks about asymmetry, signals, verifiable disclosure and credible commitments. Research on AI agents runs experiments with agent buyers. Cryptography and Ethereum engineering work on trust minimization, verifiable credentials and agent payment protocols. Each field sees its own part of the picture and rarely cites the others.</p>
+<p>In genre, this is <strong>an interdisciplinary review with the author's own concept</strong>. The first goal is to gather in one place, with sources, what each of these fields already knows about the machine buyer and about trusting it. The second is to offer a framework that ties them together, built on two concepts: <strong>machine-centric marketing</strong> and <strong>machine-verifiable honesty</strong>. The paper does not claim to be fundamental research and reports no experiments of its own. Its value lies in bringing different fields to bear on one process and in the ideas that follow from doing so.</p>
+<div class="note own"><p><strong>How to read this paper. </strong>The review part relies on sources, cited in square brackets. The author's own ideas and proposals are set apart in blocks marked "Author's note." On the empirical side, the paper relies on other people's research.</p></div>
+</section>
+
+<section>
+<h2 id="section-1"><span class="n">1</span><span>Main conclusion</span></h2>
+<div class="note key"><p><strong>"Machine-centric marketing" </strong>is a strong term for a distinct logic within marketing as a whole, if we take it to mean marketing optimized not merely with the help of machines but <strong>for the machine that takes part in choosing and buying</strong>. Above all, this means AI agents that research the market, compare offers, filter options and, in some scenarios, complete the purchase on behalf of a person or an organization.</p></div>
+<div class="note"><p><strong>The key shift in perspective: </strong>traditional marketing mostly optimizes communication with a person. Machine-centric marketing has to optimize for something else: getting the product into the machine's "consideration set," having it interpreted correctly, compared fairly and, in the end, chosen by the machine.</p></div>
+<div class="note"><p><strong>Three levels worth keeping apart: </strong>Agentic Commerce as the broader model of trade; Machine Customer as a new type of buyer, a new participant on the demand side; Machine-Centric Marketing as the proposed name for the marketing discipline that forms around this buyer.</p></div>
+<div class="note"><p><strong>Machine trust needs a foundation: </strong>a machine does not take claims on faith, it checks them. So the central question of machine-centric marketing is not "how do we persuade?" but "how do we make checking cheap?" We call an environment where checking a claim costs almost nothing, and deception is either technically impossible or immediately visible, <strong>machine-verifiable honesty</strong> (Section 8). Machine Trust rests on it, and it gives Machine Persuasion a precise form. This is a normative claim. Today's agents can still be swayed by presentation (Section 2.3), and that is exactly why they need an environment where verification is cheaper than trust.</p></div>
+</section>
+
+<section>
+<h2 id="section-2"><span class="n">2</span><span>Review: four lines of research on one process</span></h2>
+<p>What follows is a short summary of what each of the four fields already knows about the machine buyer and about trusting it. This is not a systematic review. It names the key works that the rest of the paper builds on.</p>
+
+<h3 id="section-2-1"><span class="n">2.1.</span>Marketing and law: the machine buyer</h3>
+<p>One of the first academic formulations came from legal scholars. Gal and Elkin-Koren (2017) described "algorithmic consumers," digital agents that predict needs, make purchase decisions, negotiate and complete the transaction for a person, and they analyzed what this means for competition and regulation. <span class="cite">[12]</span> Dawar and Bendle (Harvard Business Review, 2018) carried the idea into marketing: as assistants satisfy consumers, trust in the assistant starts to replace trust in the brand, and marketing becomes a battle for the AI assistant's attention. <span class="cite">[13]</span> Gartner has been developing the idea of the machine customer since 2015. In the book by Scheibenreif and Raskino (2023), a machine customer is defined as a non-human economic actor that obtains goods or services in exchange for payment, and the authors describe three phases of its evolution: "bound," "adaptable" and "autonomous" customers. <span class="cite">[14]</span></p>
+<p>Closest to the practice of machine visibility is the research on Generative Engine Optimization (Aggarwal et al., KDD 2024): adding citations, quotations and statistics makes a source much more visible in a generative system's answers, while classic keyword stuffing brings little to no improvement and, on the deployed Perplexity engine, actually made things worse. <span class="cite">[15]</span> In other words, signs of verifiability already attract the machine reader today. Academic work on the machine buyer as the audience of marketing is ongoing (Accornero, 2026 <span class="cite">[4]</span>), and in 2026 the first call for a separate discipline appeared in a peer-reviewed marketing journal. Sarstedt, Adler and Imschloss (Journal of Marketing Analytics) introduce the "AI customer" as a distinct market actor with its own decision logic and argue that marketing needs a new subdiscipline, "machine marketing," devoted to understanding, predicting and shaping the behavior of AI-based decision-makers. <span class="cite">[52]</span> Their research note sets out the agenda; this paper takes up one question inside it: the role of verification and what it costs.</p>
+
+<h3 id="section-2-2"><span class="n">2.2.</span>The economics of information and trust</h3>
+<p>The problem that machine-verifiable honesty addresses in this paper was formalized in economics long ago. Akerlof (1970) showed how information asymmetry about quality destroys a market. <span class="cite">[17]</span> Spence (1973) explained why a signal carries information only when it costs the honest seller less than the dishonest one. <span class="cite">[18]</span> Grossman (1981) and Milgrom (1981) proved the "unraveling" result: if claims can be verified and the buyer is skeptical, silence reads as a bad sign, and sellers are better off disclosing everything. <span class="cite">[19][20]</span> At the other end is "cheap talk" as described by Crawford and Sobel (1982), where messages that cannot be verified convey only limited information <span class="cite">[21]</span>; the modern theory of Bayesian persuasion (Kamenica and Gentzkow, 2011) describes how a sender designs the information environment of the receiver. <span class="cite">[22]</span></p>
+<p>The second classic line is about commitments. Williamson (1983) showed how "hostages," losses accepted voluntarily in case of breach, make promises credible. <span class="cite">[23]</span> Klemperer (1995) laid out the role of switching costs in competition. <span class="cite">[24]</span> In relationship marketing, the central work is the commitment-trust theory of Morgan and Hunt (1994), in which commitment and trust are the key mediators of long-term relationships. <span class="cite">[16]</span> Finally, Shahidi, Rusak, Manning, Fradkin and Horton (NBER, 2025) analyze how AI agents lower the transaction costs of search, communication and contracting, and what new frictions appear along the way. <span class="cite">[25]</span></p>
+
+<h3 id="section-2-3"><span class="n">2.3.</span>How AI buyer agents behave: the evidence</h3>
+<p>Since 2025, controlled experiments with agent buyers have started to appear. The ACES study (Columbia University; ACM Web Conference 2026) found that agents' choices cluster on a few products, their preferences shift between model versions, and they show strong position biases. They penalize sponsored tags and reward platform endorsements, and simple description tweaks made by a seller-side agent can drive significant gains in market share. <span class="cite">[26]</span> Magentic Marketplace (Microsoft Research, 2025) found a strong "first-proposal bias" and tested three manipulation tactics against agents: psychological persuasion, fake credentials and prompt injection. Prompt injection worked, and even basic persuasion proved effective. <span class="cite">[27]</span> Cherep, Maes and Singh (2025) showed that LLM agents are more sensitive than people to "nudges" such as defaults, suggestions and highlighted information. <span class="cite">[28]</span> Experiments in credence goods markets show that making claims verifiable does not by itself guarantee honest behavior or higher welfare among LLM agents. <span class="cite">[29]</span></p>
+<p>At this point the review leads to a clear conclusion: today's agents can be swayed by presentation, and they can be manipulated. This matters for everything that follows (Sections 8.4 and 12).</p>
+
+<h3 id="section-2-4"><span class="n">2.4.</span>Cryptography, Ethereum and the trust infrastructure of agentic commerce</h3>
+<p>The idea of trust minimization goes back to Szabo: a trusted third party built into a protocol is a security hole installed in advance. <span class="cite">[8]</span> The first working system built on this idea was Bitcoin. From its first lines, Nakamoto describes it as an electronic payment system based on cryptographic proof instead of trust. <span class="cite">[51]</span> In a sense, the whole line of thought this paper follows starts here. Buterin formulated the principle of credible neutrality: a mechanism is neutral if you can see that from its design, and its execution is open and publicly verifiable. <span class="cite">[7]</span> Douceur (2002) showed that without a logically centralized authority, Sybil attacks are always possible except under extreme and unrealistic assumptions. <span class="cite">[9]</span> Proof of solvency (Dagher et al., 2015) showed how to prove solvency without revealing all the data. <span class="cite">[37]</span> Simplicity as a condition of security goes back to Saltzer and Schroeder (1975) and their principle of "economy of mechanism": keep the design as simple and small as possible. <span class="cite">[39]</span></p>
+<p>In 2025 and 2026 this line turned into industry standards for agentic commerce. W3C Verifiable Credentials 2.0 (2025) defines cryptographically secured, machine-verifiable credentials. <span class="cite">[33]</span> Google AP2 (2025) builds trust in agent payments on "mandates," tamper-proof, cryptographically signed digital contracts that serve as verifiable proof of the user's instructions <span class="cite">[34]</span>; Mastercard Verifiable Intent (2026) creates a tamper-resistant record of what the user authorized. <span class="cite">[35]</span> Stripe and OpenAI (ACP) and Coinbase (x402) standardize the agent's payment itself <span class="cite">[38]</span>; they have been joined by the Machine Payments Protocol (Stripe and Tempo) for paying for APIs and other web resources, and by Visa's Trusted Agent Protocol, which helps merchants recognize trusted agents. <span class="cite">[42][49][50]</span> On Ethereum, the ERC-8004 "Trustless Agents" standard introduces registries for agent identity, reputation and validation. <span class="cite">[36]</span></p>
+<div class="note"><p><strong>Where the gap is: </strong>all of these standards verify the <em>buyer's</em> side and the transaction itself, that is, who authorized what and whether it was carried out. Verifying what the <em>seller</em> claims about its own state, rules and commitments is far less standardized. This is the gap that machine-verifiable honesty is aimed at.</p></div>
+<p>In September 2026, the world's largest asset manager also recorded the convergence of these lines. BlackRock's report "The Machine-Native Economy" describes AI as machine-native intelligence and digital assets as machine-native money. In the report's words, tokenized assets are designed for machine-verifiable transfer and settlement, while KYC, AML and KYA (know-your-agent) checks happen off-chain, and only the verified results are passed on-chain. <span class="cite">[42]</span> This is industry material that itself states it is not research or investment advice, and its focus is once again on payments and settlement. The authors admit that agent payments are still at an early stage, and independent data confirms it: TRM Labs estimates that of roughly $52.7 million processed through x402 since May 2025, AI agents account for only 0.6 to 7.5% of likely commerce. <span class="cite">[43]</span></p>
+
+<h3 id="section-2-5"><span class="n">2.5.</span>The closest work</h3>
+<p>The works closest to the ideas in this paper appeared in 2025 and 2026, and all of them are preprints. Ventirozos and Shardlow (2026) show that when the buyer is an agent, what's scarce is no longer ranking but trustworthy information, and the competitive question shifts from "who ranks first" to "who can substantiate their claims most cheaply and credibly"; in their model, verification is a paid microtransaction. <span class="cite">[30]</span> Xie (2026) builds a game-theoretic model of buyer and seller agents with verification and shows that verification helps only when it covers the disputed proposition, and that it can be privately underprovided or, in other cases, overprovided; in the model, verified execution does not prove true value. <span class="cite">[31]</span> Madugula, Esteva de la Rosa and Shankar (2026) build verifiable execution into a model of loyalty under agentic commerce. <span class="cite">[32]</span></p>
+<p>The same idea shows up independently in practical business writing. Katja Forbes's book "Machine Customers: The Evolution Has Begun" (2025) starts from the premise that machine customers don't respond to emotional appeals or brand storytelling; they evaluate clear information, consistent performance and verifiable claims. <span class="cite">[44]</span> Accornero, author of the demand-side work on the machine customer <span class="cite">[4]</span>, puts it even more bluntly in the announcement of his book "The Algorithmic Shopper" (scheduled for April 2027): the only way to appeal to an AI agent is to be verifiably better, that is, to have a better product, a more transparent supply chain and cleaner, more accessible data. <span class="cite">[45]</span> Finally, McKinsey's analysis of agentic commerce concludes that loyalty becomes less about sentiment and more about policy <span class="cite">[5]</span>, which lines up directly with this paper's claim that verifiable commitments replace loyalty (Section 9.3).</p>
+<div class="note own"><p><strong>Author's note: where this paper stands. </strong>This paper came about independently, out of the author's hands-on practice as a programmer and marketer, and only later was it compared with the literature. We take the fact that different fields reached similar conclusions by different paths as an argument that the process described here is real. Our approach differs in that it treats the cost of verification not as a service and not as an equilibrium choice between parties, but as <strong>a design parameter of the environment</strong>, one that can be brought close to zero for claims about state and rules, and as <strong>a measurable marketing quantity</strong>. The closest academic framing, machine marketing as proposed by Sarstedt and colleagues <span class="cite">[52]</span>, argues that a new subdiscipline is needed; we offer an answer to what its foundation could be. The contribution is not the discovery of individual mechanisms, each of which is known, but bringing them into one framework where marketing, the economics of trust and the architecture of verifiable systems describe the same shift.</p></div>
+</section>
+
+<section>
+<h2 id="section-3"><span class="n">3</span><span>What already exists in international terminology</span></h2>
+<p>Judging by current sources from 2026, the terminology is taking shape but has not yet settled into a single standard. Some terms are catching on quickly, while a name specifically for "marketing aimed at the machine as the audience" is still open.</p>
+<div class="tbl-wrap">
+<table class="data terms">
+<thead><tr><th>Term</th><th>Meaning</th><th>Status</th><th>Relation to this concept</th></tr></thead>
+<tbody>
+<tr><td>Agentic Commerce</td><td>Buying and selling in which AI agents research, compare, negotiate and/or complete deals on behalf of people or businesses.</td><td>Already catching on noticeably.</td><td>The broad frame; covers more than marketing.</td></tr>
+<tr><td>Machine Customer</td><td>A machine economic actor able to act as a buyer: to find, evaluate and purchase.</td><td>Still forming, but quickly gaining meaning.</td><td>Almost a direct description of marketing's new audience.</td></tr>
+<tr><td>Agent-to-Agent Commerce</td><td>Interaction between a buyer's AI agent and a seller's AI agent.</td><td>Actively used in B2B and agentic commerce.</td><td>Describes the channel and architecture of interaction, not marketing itself.</td></tr>
+<tr><td>Machine-Readable Commerce</td><td>Commercial information and interfaces structured so that machines can interpret them reliably.</td><td>An applied, growing term.</td><td>Describes the technical layer that machine-centric marketing needs.</td></tr>
+<tr><td>Agentic Marketing</td><td>Marketing that uses AI agents and autonomous automation.</td><td>Meaning still broad and ambiguous.</td><td>Needs to be kept distinct from marketing aimed at AI agents.</td></tr>
+<tr><td>GEO / Generative Engine Optimization</td><td>Optimizing the presence of a brand or content in generative search and answer systems.</td><td>A parallel practice.</td><td>Part of the visibility task, but not the whole system of machine-centric marketing.</td></tr>
+<tr><td>Machine Marketing / AI Customers</td><td>A proposed marketing subdiscipline devoted to understanding, predicting and shaping the behavior of AI-based decision-makers ("AI customers").</td><td>Proposed in a peer-reviewed research note, 2026. <span class="cite">[52]</span></td><td>The closest academic framing; machine-centric marketing adds verifiability as its foundation (Section 8).</td></tr>
+<tr><td>Verifiability / Trust Minimization / Credible Neutrality</td><td>Verifiable execution, minimal trust in intermediaries, mechanisms whose neutrality is visible from their design.</td><td>Established concepts in the design of decentralized mechanisms. <span class="cite">[7][8]</span></td><td>The conceptual base of machine-verifiable honesty (Section 8).</td></tr>
+</tbody>
+</table>
+</div>
+<div class="note"><p><strong>What this adds up to: </strong>international practice already has enough terms to describe the new commercial environment, but "marketing for machine customers" in particular has no single accepted, established name; the first academic proposal, "machine marketing," appeared only in 2026. <span class="cite">[52]</span> The concepts of verifiability and trust minimization, by contrast, are well developed, but in mechanism design rather than in marketing theory.</p></div>
+</section>
+
+<section>
+<h2 id="section-4"><span class="n">4</span><span>Related concepts and where they end</span></h2>
+
+<h3 id="section-4-1"><span class="n">4.1.</span>Agentic Commerce: the overall frame</h3>
+<p>IBM defines agentic commerce as an approach to buying and selling in which AI agents act on behalf of consumers or businesses to research, negotiate and complete purchases, often without direct human intervention. <span class="cite">[1]</span> Deloitte describes the same shift as a journey: from assisted discovery and assisted shopping to agentic shopping, then autonomous shopping, and finally agent-to-agent commerce, as consumers hand over more and more purchasing authority to agents. <span class="cite">[2][3]</span></p>
+<div class="note"><p><strong>The essential difference: </strong>Agentic Commerce answers the question "how will trade happen?", while machine-centric marketing answers "how do we get the machine to choose our product in this new trading environment?"</p></div>
+
+<h3 id="section-4-2"><span class="n">4.2.</span>Machine Customer: a new type of buyer</h3>
+<p>The term Machine Customer is especially close to the proposed model; in industry analysis, Gartner has been developing it since 2015. <span class="cite">[14]</span> It captures a change on the demand side: the buying subject becomes a machine acting on behalf of a person or an organization. In a 2026 academic paper, Paul F. Accornero directly proposes treating the AI agent as a new kind of "buyer" in categories where the purchase decision and its execution are delegated to a machine. <span class="cite">[4]</span></p>
+<p class="roles-lead"><strong>This lets us distinguish three roles:</strong></p>
+<dl class="roles">
+  <div><dt>Consumer</dt><dd>the person who experiences the value and forms the underlying need.</dd></div>
+  <div><dt>Shopper / Buyer</dt><dd>the one who actually searches, compares and chooses the offer.</dd></div>
+  <div><dt>Machine Customer / AI Agent</dt><dd>a machine participant that can perform the shopper or buyer role on behalf of a person or an organization.</dd></div>
+</dl>
+
+<h3 id="section-4-3"><span class="n">4.3.</span>Agent-to-Agent Commerce: the machine channel for deals</h3>
+<p>In B2B, the "agent-to-agent" scenario is described more and more explicitly: the buyer's agent and the seller's agent interact directly, explore options, agree on terms and can trigger transactions. Deloitte calls this a possible next stage of B2B commerce. <span class="cite">[3]</span></p>
+<p>This matters for marketing because the classic chain "brand → person → purchase" may turn into "brand → machine agent → purchase," or even "seller's agent ↔ buyer's agent → deal." The limiting case comes when the seller's side is represented by a public, executable rule instead of an agent with its own discretion. Its behavior is fully predictable, and the buying agent only needs to check the rule itself.</p>
+
+<h3 id="section-4-4"><span class="n">4.4.</span>Machine-Readable Commerce: the technical layer</h3>
+<p>If a machine takes part in the choice, a good-looking product page isn't enough for it. It needs unambiguous entities, attributes, prices, availability, constraints, variants, policies, evidence and a clear path to action. This practical side is increasingly described as machine-readable commerce. <span class="cite">[5]</span> EY puts it more firmly: companies need commercial data and terms that systems can interpret without ambiguity, with products, prices, rules and promises clear and consistent enough for machines to trust. <span class="cite">[6]</span> According to BlackRock, standardized machine-readable representations of assets reduce the need for custom integrations and let agents run more complex chains of actions. <span class="cite">[42]</span></p>
+<p>So machine-centric marketing includes information architecture: being "visible" isn't enough for a product; a machine also has to be able to read, compare and verify it correctly. Readability, though, is not yet verifiability: a structured claim is still a claim until the machine can check it against a primary source. That next step is covered in Sections 8 and 9.</p>
+
+<h3 id="section-4-5"><span class="n">4.5.</span>Agentic Marketing: not the same thing</h3>
+<p>Agentic Marketing may refer to marketing carried out with the help of AI agents: generating campaigns, automated optimization, autonomous process launches, personalization and other forms of automation. This field sees the machine as the one doing the marketing. Machine-centric marketing sees the machine as the audience and a participant in the choice.</p>
+<div class="note"><p><strong>The difference in one line: </strong><span class="line">Agentic Marketing = "marketing that a machine does."</span><span class="line">Machine-centric marketing = "marketing that a machine has to understand and accept."</span></p></div>
+
+<h3 id="section-4-6"><span class="n">4.6.</span>GEO / Generative Engine Optimization: only one of the tools</h3>
+<p>Optimizing presence in generative search is close to the visibility task, but narrower in scope. GEO focuses on getting a brand or content to appear in a generative system's answers. Machine-centric marketing has to cover the whole path, from discovery to comparison, trust, choice and the deal.</p>
+</section>
+
+<section>
+<h2 id="section-5"><span class="n">5</span><span>A proposed conceptual architecture</span></h2>
+<p>What follows is a working model, not an industry standard. Its job is to fit the term logically into general marketing theory.</p>
+<div class="tbl-wrap">
+<table class="arch">
+<tbody>
+<tr class="root"><td>MARKETING</td><td>Creating, communicating and delivering value in the market</td></tr>
+<tr><td><span class="arrow">→</span> Human-Centric Marketing</td><td>Optimizing for a person's perception, motivation, trust and behavior</td></tr>
+<tr><td><span class="arrow">→</span> Machine-Centric / Machine-Oriented Marketing</td><td>Optimizing for how a machine agent perceives, evaluates and chooses a product</td></tr>
+<tr><td><span class="arrow">→</span> Agentic Commerce</td><td>The broader context in which such a machine choice can end in autonomous trade</td></tr>
+<tr><td><span class="arrow">→</span> Machine Customer</td><td>The specific type of machine participant on the demand side</td></tr>
+<tr><td><span class="arrow">→</span> Machine-Verifiable Honesty</td><td>The property of the environment that gives machine trust a basis: verification is cheaper than trust, and deception is impossible or immediately visible</td></tr>
+</tbody>
+</table>
+</div>
+<div class="note status"><p><strong>Note: </strong>"Machine-Centric Marketing," "Machine-Oriented Marketing" and "Machine-Verifiable Honesty" are offered here as working names for the concept. Searching current English-language sources, we found no sign that any of them has already become a widely used international term with a stable, recognized definition. The closest existing term is "machine marketing." <span class="cite">[52]</span></p></div>
+</section>
+
+<section>
+<h2 id="section-6"><span class="n">6</span><span>A working definition</span></h2>
+<div class="note key"><p><strong>Machine-Centric Marketing: </strong>the branch of marketing concerned with designing, presenting and distributing value so that AI agents and other machine systems can discover, correctly interpret, compare, evaluate and choose an offer, acting as an intermediary for, or the direct executor of, the purchase decision of a person or an organization.</p></div>
+<p><strong>The name. </strong>We chose Machine-Centric Marketing (MCM) as the main term because it best conveys the idea of marketing built around the machine participant in the choice. Machine-Oriented Marketing is acceptable as a synonym but sounds more technical. The foundation of the concept is called Machine-Verifiable Honesty (MVH). Both names are offered as working names, not as an existing standard (Section 5). The term is deliberately not tied to today's technology: it covers AI agents, recommender systems, procurement algorithms and other mechanisms of automated choice.</p>
+<p>The key word in this definition is "marketing." This is not only about technically integrating a store with an agent's API; it's about the full set of marketing tasks: positioning, value proposition, proof, trust, differentiation, visibility, conversion and retention, keeping in mind that the machine does much of the cognitive work.</p>
+<p>Of these tasks, one becomes decisive when the audience is a machine: trust. A person can be brought to trust through image, reputation and social proof. A machine acting on its owner's behalf shouldn't take anything on faith; its job is to check claims against sources. That's why the definition is paired with a second concept, which describes what the environment the seller operates in must be like: machine-verifiable honesty (Section 8).</p>
+</section>
+
+<section>
+<h2 id="section-7"><span class="n">7</span><span>What machine-centric marketing includes</span></h2>
+<dl class="parts">
+  <div><dt>Machine Visibility.</dt><dd>Getting the product into the pool from which an AI agent picks its options.</dd></div>
+  <div><dt>Machine Interpretability.</dt><dd>An unambiguous understanding of what the product is, its properties, price, terms and constraints.</dd></div>
+  <div><dt>Machine Comparability.</dt><dd>Presenting the product in a form that lets the agent compare it correctly with the alternatives.</dd></div>
+  <div><dt>Machine Trust.</dt><dd>Evidence, data provenance, guarantees, policies and other signals the machine can use to reduce uncertainty. At its limit, this is an environment of machine-verifiable honesty, where a claim is replaced by a readable fact (Sections 8 and 9).</dd></div>
+  <div><dt>Machine Persuasion.</dt><dd>Not "emotionally persuading a machine," but creating the kind of value signals and evidence that shape how a machine ranks and chooses. The strongest signal for a machine is one that costs almost nothing to verify (Section 8.4).</dd></div>
+  <div><dt>Agent Conversion.</dt><dd>Designing the path by which an agent's recommendation turns into action: adding to cart, checking out, requesting a quote or closing the deal.</dd></div>
+  <div><dt>Agent-to-Agent Selling.</dt><dd>Preparing the commercial offer and the interaction logic for the case where both the buyer and the seller are represented by agents.</dd></div>
+</dl>
+</section>
+
+<section>
+<h2 id="section-8"><span class="n">8</span><span>Machine-verifiable honesty:<span class="h2sub">the foundation of machine trust</span></span></h2>
+
+<h3 id="section-8-1"><span class="n">8.1.</span>The problem: claims about oneself</h3>
+<p>In any economic system, participants make claims about themselves: "we have this much inventory and liquidity," "we won't change the terms," "there's real demand behind our product." Traditionally, such claims are either taken on trust or checked expensively and after the fact. Trust is a cost and a vulnerability: wherever you have to trust, you can be deceived. The literature on protocol security puts it bluntly: a trusted third party built into a design is a security hole installed in advance, which will later have to be closed by other means. <span class="cite">[8]</span></p>
+<p>For a human buyer, brand and reputation partly remove the cost of trust. For a machine buyer, this path shouldn't work: an agent protecting its owner's interests has to rely on data, not on presentation. For such an agent, a claim that can't be verified is either noise or risk.</p>
+
+<h3 id="section-8-2"><span class="n">8.2.</span>Definition and the asymmetry of costs</h3>
+<div class="note key"><p><strong>Machine-Verifiable Honesty: </strong>the property of a system designed so that verifying claims costs almost nothing, while deception is either technically impossible or immediately visible.</p></div>
+<p><strong>Strong and weak forms. </strong>In the strong form, the facts themselves are verifiable: state and rules exist inside a verifiable environment, as with digital and financial assets on public blockchains. In the weak form, only the origin of claims about the outside world is verifiable: who signed them and when, as with verifiable credentials for a product or service. <span class="cite">[33]</span> The strong form serves as the reference point and is the main subject of Sections 8 and 9; the weak form describes what is achievable for most traditional commerce (Section 11.4).</p>
+<p>The concept rests on ideas described in the literature (verifiability, trust minimization, credible neutrality) and, originally, on the principle of "proof instead of trust" that Bitcoin started from. <span class="cite">[7][8][51]</span> At its core is an asymmetry of costs:</p>
+<div class="note"><p>The system is built so that honesty becomes the path of least resistance. Not "deception is forbidden," but "deception costs more and makes less sense than honesty, because verifying is almost free and deceiving is nearly impossible or immediately noticed."</p></div>
+<p>The emphasis moves from the technical possibility of verification to the economics of honesty: honesty here is not a participant's virtue and not a prohibition, but a property of an environment in which a rational participant is honest by default.</p>
+<p>In terms of economic theory, the asymmetry of costs is an informal statement of several known results: verifiable disclosure makes silence suspicious and leads to full disclosure (Grossman, Milgrom <span class="cite">[19][20]</span>); a signal carries information when faking it costs the dishonest participant more (Spence <span class="cite">[18]</span>); a mechanism in which honest behavior pays better is called incentive-compatible in mechanism design. The seller's choice doesn't disappear; it moves to the design stage, where the seller decides whether to build on a verifiable foundation and which parameters to freeze. In essence, this is a credible commitment in Williamson's sense <span class="cite">[23]</span>, made once, when the system is created. What machine-verifiable honesty adds to this line of work is not a new mechanism but a change of focus and the transfer of these results into marketing: once such a commitment is made, disclosure is no longer a separate decision in every deal and becomes a <em>state</em> of the environment, one in which nothing goes undisclosed.</p>
+
+<h3 id="section-8-3"><span class="n">8.3.</span>Honesty as a property of the environment, not the participant</h3>
+<p>Ordinary honesty is a property of an agent: "he doesn't lie." Machine-verifiable honesty is a property of an environment: "lying here makes no sense, because everything can be checked, and checking is cheaper than trusting." Designing honest participants means relying on the most fragile foundation there is. Designing an environment where honesty is rational means relying on a stable one.</p>
+<p>For marketing, this changes the object of the work: the subject is no longer a message about honesty, but a setup that makes such a message unnecessary.</p>
+
+<h3 id="section-8-4"><span class="n">8.4.</span>Persuading a machine means lowering the cost of verification</h3>
+<p>Empirical studies (Section 2.3) show that today's AI agents <em>do</em> respond to presentation: position in the results, the wording of a description, fake credentials and instructions embedded in text noticeably affect their choices. <span class="cite">[26][27][28]</span> So the claim "an agent can't be swayed by presentation" is wrong as a description of how things are.</p>
+<div class="note own"><p><strong>Author's note. </strong>The thesis of this paper is normative: an agent designed as a verifier <em>should not</em> give in to what can't be verified, and an environment of machine-verifiable honesty <em>reduces the payoff</em> from presentation and manipulation. The weakness of today's agents doesn't refute the thesis; it motivates it: the easier an agent is to manipulate, the more valuable an environment where verification is cheaper than trust becomes for it. A person goes from "persuade" to "believe." An agent that is supposed to protect its owner's interests goes from "show" to "check."</p></div>
+<p>Hence the practical rule of machine-centric marketing: don't amplify the claim, make it cheaper to verify. Other things being equal, an offer whose properties an agent can check with a single request to a primary source should win over an offer that requires trust, as agents become more cautious and get verification tools. This is close to the conclusion of Ventirozos and Shardlow that the competitive question is shifting toward who "can substantiate their claims most cheaply and credibly." <span class="cite">[30]</span> The difference between looking verifiable and being verifiable (Section 11.6) is central to the ethics of machine-centric marketing (Section 12).</p>
+
+<h3 id="section-8-5"><span class="n">8.5.</span>Two levels of honesty</h3>
+<p><strong>The state level: "what is there now, is visible." </strong>Any claim about the current situation (inventory, reserves, commitments, balances, relationships) is a readable fact, not a statement. The rule: if a system has to <em>tell</em> you about its state, that is already a point of distrust.</p>
+<p><strong>The rules level: "the laws everything runs by are fixed and visible." </strong>Parameters are either built into the design of the system or frozen once at creation and then cannot be changed by anyone. There are no rules that can be "tweaked," so the third level of honesty, the honesty of the process of changing the rules, is reduced to zero: no such process exists. Only monotonic changes that don't touch any rule are allowed (for example, topping up a pre-announced resource "only upward"): a readable value changes, the law does not. This fits the known principles of neutral mechanisms: publicly verifiable execution, simplicity and infrequent change. <span class="cite">[7]</span> Buterin counts guaranteed execution according to programmed rules among the properties of Ethereum that hold throughout its evolution from 2015 to 2030. <span class="cite">[40]</span></p>
+</section>
+
+<section>
+<h2 id="section-9"><span class="n">9</span><span>How verifiability is implemented:<span class="h2sub">principles and examples</span></span></h2>
+<p>The principles in this section are not tied to any one technology. But today the most complete environment for them is public blockchains with executable contracts: Ethereum and compatible networks, where both state and rules are expressed as code and public data that any node can reproduce. <span class="cite">[10]</span> The examples below come from this environment; their meaning carries over to any system that can show a machine primary data instead of claims.</p>
+
+<h3 id="section-9-1"><span class="n">9.1.</span>State instead of statements</h3>
+<p>Reserves, balances, commitments and relationships are stored as the contract's public state and read directly. An agent doesn't need to ask the system "how much do you have?"; it reads that for itself. Reports, press releases and numbers on a storefront stop being the source of truth and become just a translation of the primary data. BlackRock describes it this way: tokenized assets are expressed as machine-readable transaction data and governing rules, the network verifies authorization and the validity of the operation, and smart contracts apply conditions specific to the asset. <span class="cite">[42]</span></p>
+
+<h3 id="section-9-2"><span class="n">9.2.</span>Frozen rules and invariants</h3>
+<p>Parameters are fixed at creation, and after that no call can change them; in a running system there are no addresses with special rights. Formally, the "rules level" is defined by a set of invariants that can be checked by audits and automated tests: total issuance of a resource over any period does not exceed a pre-announced budget; a commitment cannot be withdrawn before its date; no parameter can be changed after creation; no registry entry can be overwritten. An invariant is a rule turned into a verifiable statement about every possible future state.</p>
+
+<h3 id="section-9-3"><span class="n">9.3.</span>Commitment instead of loyalty</h3>
+<p>One consequence of automated comparison is that switching suppliers becomes cheap (Section 10): loyalty built on habit doesn't hold a machine. A verifiable environment offers a replacement: <strong>a commitment</strong>, a condition the participant accepts voluntarily, with terms and parameters known in advance and recorded in a public registry. An example: locking funds for a period the participant chose. In economic theory, this is a special case of a credible commitment, a "hostage" that makes a promise reliable <span class="cite">[23]</span>; in relationship marketing, commitment and trust have long been seen as the key supports of long-term relationships. <span class="cite">[16]</span></p>
+<p>The test that separates an honest commitment from a "kill switch" is the question "who decides?" If the exit conditions were chosen by the participant in advance, were known before entry and cannot be changed after the fact by anyone (neither the system nor its creators), the deal is protected in both directions. A registry of such commitments turns a promise into a schedule: not "the resource is here, but it might leave," but "amount X until date Y." For a machine buyer, this is a direct replacement for loyalty: instead of a feeling, there's a verifiable term.</p>
+<div class="note own"><p><strong>Author's note. </strong>We are not claiming that emotional loyalty disappears: a person can still be loyal to a brand and to their own agent (compare the model in which emotional capital and verifiable execution work together <span class="cite">[32]</span>). Our claim is narrower: in the part of the choice that a person has delegated to a machine, the role of loyalty passes to verifiable commitments.</p></div>
+
+<h3 id="section-9-4"><span class="n">9.4.</span>Authentic demand as a verifiable signal</h3>
+<p>Nearly all the metrics an agent uses to evaluate a project (number of users, trading volume, locked liquidity, activity) are indirect indicators of demand, and all of them can be inflated. The scale of the problem is well documented. An NBER study found that on unregulated crypto exchanges, wash trading made up on average more than 70% of reported volume. <span class="cite">[46]</span> Chainalysis estimated suspected wash trading on Ethereum, BNB Smart Chain and Base in 2024 at about $2.57 billion. <span class="cite">[47]</span> During the LayerZero token distribution in 2024, about 800,000 of roughly 6 million addresses were preliminarily flagged as farms created for the airdrop, and after the snapshot the number of daily messages on the protocol fell by about 90%. <span class="cite">[48]</span> An agent that takes such numbers at face value gets the most important thing wrong: whether the product has real demand. So the claim "we have lots of users" becomes a verifiable fact only when the authenticity can be checked along with the number.</p>
+<p>Authenticity shows in the patterns any activity leaves in public history: the age of addresses and how varied their histories are; shared funding sources, that is, clusters of wallets funded from one address; how synchronized and regular the actions are; the variety of counterparties; retention, meaning whether participants come back months later; and the structure of the graph of connections. These are exactly the methods the industry already uses to filter out address farms before token distributions and to estimate wash trading volume. <span class="cite">[47][48]</span> The same asymmetry of costs is at work here: faking plausible organic activity with a long and varied history is expensive, and that cost grows over time.</p>
+<div class="note own"><p><strong>Author's note: organic activity in a machine economy. </strong>When agents themselves become legitimate market participants, "organic" stops meaning "human": agent activity is not fake, yet in blockchain records it's hard to tell apart from scripts. <span class="cite">[43]</span> The criterion shifts from "human or bot" to "independent real demand or coordinated imitation." A hundred independent agents paying for a service are real demand; a thousand wallets owned by one party passing funds around in a circle are not. Authenticity can't be strictly proven <span class="cite">[9]</span>, any heuristic makes mistakes, and analyzing connections runs into privacy (Section 9.8). So the system doesn't issue a verdict itself: it makes the demand data readable, and independent observers with their own methods do the evaluating.</p></div>
+
+<h3 id="section-9-5"><span class="n">9.5.</span>Simplicity as a requirement of honesty</h3>
+<p>Elegance and honesty coincide: the simpler the system and the less custom logic sits on top of a proven base primitive, the smaller the surface for hidden trust. Complexity doesn't add value: it adds places where honesty can leak, and more for an observer to check. In security, this principle is known as economy of mechanism. <span class="cite">[39]</span> From it follows a second principle: don't reinvent the wheel. Wherever a task has already been solved in a proven way, use the proven solution; every line of custom code adds something an observer will have to check. A telling example from practice is the architecture of Uniswap v2, where the core is deliberately minimal, because contracts with a smaller surface are easier to analyze and can state the desired properties of the system directly. <span class="cite">[11]</span></p>
+<div class="note own"><p><strong>Author's note: which complexity is dangerous. </strong>Buterin distinguishes encapsulated complexity, isolated inside a component, from systemic complexity, which comes from interdependencies between parts of a system <span class="cite">[41]</span>; he counts the complexity of zero-knowledge proofs as encapsulated. <span class="cite">[40]</span> For machine-verifiable honesty, the danger is above all systemic complexity. Cryptography that is complex but isolated and well proven doesn't contradict this principle.</p></div>
+
+<h3 id="section-9-6"><span class="n">9.6.</span>Three layers of trust and agent-first interfaces</h3>
+<dl class="roles">
+  <div><dt>Core</dt><dd>the subject of machine-verifiable honesty: rules, registries, accounting. Self-sufficient: every operation can be performed by direct calls; zero control "knobs," zero participants with special rights.</dd></div>
+  <div><dt>Periphery</dt><dd>convenience contracts that bundle several steps into one. It holds neither state nor funds between operations and has no rights in the core. You don't need to trust the periphery, because the core doesn't require it: the same steps can be done by hand (the core/periphery pattern <span class="cite">[11]</span>).</dd></div>
+  <div><dt>Storefront</dt><dd>the human interface, a translator from the language of primary data, but not a source of truth. It is a hidden trust point, and an honest system names it. The principle: the storefront shows only values derived from the core, ideally with a verification path for every number.</dd></div>
+</dl>
+<p>The principle running through all interfaces is <strong>agent-first design</strong>: the primary consumer of the system's state is a machine (an autonomous agent, an observer's script, an AI assistant), and a person comes second. In practice, this means aggregating read methods, complete data in events so no one has to reconstruct history piece by piece, and a documented verification path for every value. BlackRock's industry report (2026) describes the same logic: structured, machine-readable representations give agents a more direct interface to blockchain data than fragmented legacy systems, and an agent can evaluate balances and rules before an authorized transaction and then verify settlement. <span class="cite">[42]</span> The human storefront is a layer on top of the same machine layer, not a separate channel of truth. In the terms of Section 7, this is Machine Interpretability, Machine Comparability and Agent Conversion all at once, built into how the system works rather than how it is described.</p>
+
+<h3 id="section-9-7"><span class="n">9.7.</span>The cost of verification as a measurable quantity</h3>
+<p>The asymmetry of costs depends on verification being cheap, so that cheapness needs to be measured. One way to do it is an external verification scenario that an independent observer runs on their own:</p>
+<ol class="args">
+  <li>Read the fixed rules and parameters.</li>
+  <li>Read the current state and compare it with what is claimed.</li>
+  <li>Compute future commitments and resource issuance from the fixed rules.</li>
+  <li>Check the history of permitted changes (for example, top-ups) against current balances.</li>
+  <li>Assess the authenticity of activity from public history using your own method.</li>
+  <li>Check any number on the storefront against the core.</li>
+</ol>
+<p>The time, computing resources and expertise needed to complete the scenario are the cost of verification. It can be measured experimentally, including in an adversarial setup where some participants try to cheat the system, with the aim of confirming the asymmetry of costs empirically rather than just asserting it.</p>
+<div class="note own"><p><strong>Author's note: how to compare systems. </strong>For comparison, a rough composite estimate from three quantities can be used: the number of trusted dependencies, that is, trust points without which the scenario can't be completed (storefront, external data sources, intermediaries); the number of requests to primary sources needed to complete the scenario; and the time and computing costs for an independent observer. The first quantity matters more than the others: a system with fewer trust points is preferable even if verification costs more, because expensive verification can be made cheaper with tools, while a trust point can't be removed without changing the system itself.</p></div>
+
+<h3 id="section-9-8"><span class="n">9.8.</span>Transparency and privacy: verifying without revealing</h3>
+<p>Full readability of state runs up against participants' right to privacy and against trade secrets: a public history of operations reveals participants' connections and behavior. The conflict doesn't require giving up verifiability. Zero-knowledge proofs make it possible to prove a property ("reserves are at least X," "the participant meets the condition," "all commitments are backed") without revealing the underlying data; proofs of solvency that don't expose customer balances are built on this principle. <span class="cite">[37]</span> The W3C Verifiable Credentials 2.0 standard was designed from the start to be both machine-verifiable and privacy-respecting. <span class="cite">[33]</span> Buterin (2026) describes a future Ethereum architecture in which zero-knowledge proofs play a key role at the base layer, and he looks separately at privacy of writes, reads and the network layer. <span class="cite">[40]</span> For a buyer agent, privacy of reads matters most: the agent's own verification queries reveal its owner's intentions.</p>
+<div class="note own"><p><strong>Author's note. </strong>Machine-verifiable honesty requires that <em>claims</em> be verifiable, not that <em>all data</em> be public. The more sensitive the data, the more sense it makes to replace disclosure with a proof of the property.</p></div>
+
+<h3 id="section-9-9"><span class="n">9.9.</span>Who actually does the checking</h3>
+<p>The phrase "verification is almost free" holds for <em>reading</em> data, but not always for <em>interpreting</em> it. Today a language-model agent doesn't check claims against a blockchain by itself: it needs tools such as nodes and RPC access, indexers, analytics services and specialized validators (in ERC-8004 this is a separate validation registry <span class="cite">[36]</span>). Each such intermediary becomes a new trust point and a new market participant with its own incentives.</p>
+<p>The infrastructure is moving to reduce this dependence. As Buterin (2026) describes it, block verification in Ethereum is shifting from downloading and re-executing everything to checking a SNARK proof and sampling data availability (PeerDAS), and light clients will be able to verify the correctness of computation as well as consensus; for the strongest guarantees you still need your own node, but the requirements for it are becoming much lower. <span class="cite">[40]</span> In this sense, "almost free verification" is still a direction the base infrastructure is moving in, rather than a state already reached. The gap between reading and interpreting is already visible in practice: an analysis by TRM Labs found that in blockchain records, AI agent payments are hard to tell apart from ordinary scripts and scheduled jobs. <span class="cite">[43]</span></p>
+<div class="note own"><p><strong>Author's note. </strong>Cheap verification alone isn't enough; machine-verifiable honesty also needs <strong>many independent verifiers</strong>: any observer should be able to reproduce a check, rather than depend on a single service. The design consequence: ship a documented verification path along with the data, so anyone can repeat the check independently.</p></div>
+</section>
+
+<section>
+<h2 id="section-10"><span class="n">10</span><span>How the object of optimization differs</span></h2>
+<div class="tbl-wrap">
+<table class="data compare">
+<thead><tr><th>Dimension</th><th>Person as the audience</th><th>Machine as the audience</th></tr></thead>
+<tbody>
+<tr><td>Perception</td><td>Images, language, emotions, social signals</td><td>Structure, unambiguity, semantics, data availability</td></tr>
+<tr><td>Comparison</td><td>Often nonlinear, contextual, heuristic</td><td>Fast matching of attributes, constraints and evidence</td></tr>
+<tr><td>Trust</td><td>Brand, reputation, social proof</td><td>Data provenance, consistency, policy, verifiability</td></tr>
+<tr><td>Persuasion</td><td>Argument, image, emotional response</td><td>Lowering the cost of verifying a claim</td></tr>
+<tr><td>Choice</td><td>A mix of rational and emotional</td><td>Optimization against given criteria, rules and constraints</td></tr>
+<tr><td>Path to purchase</td><td>Ad → interest → research → decision</td><td>Query → filtering → comparison → recommendation → action</td></tr>
+<tr><td>Switching suppliers</td><td>Can be held back by habit and attachment to the brand</td><td>Can be very cheap if the agent easily compares alternatives</td></tr>
+<tr><td>Retention</td><td>Loyalty, habit, emotional connection</td><td>Verifiable commitments with terms and conditions known in advance</td></tr>
+</tbody>
+</table>
+</div>
+<div class="note"><p><strong>This does not mean the person drops out of the model. </strong>The person still defines the need, constraints, budget, preferences and how much to delegate. The machine changes mainly the mechanics of search and choice.</p></div>
+<p>The last two rows of the table are linked: the cheaper switching is for a machine, the more valuable whatever replaces loyalty becomes for the seller. In a verifiable environment, that role is played by a commitment (Section 9.3). It doesn't hold on to the customer the way habit does; it puts a guarantee on the table that the agent can factor into its comparison.</p>
+</section>
+
+<section>
+<h2 id="section-11"><span class="n">11</span><span>The limits of machine verification</span></h2>
+<p>Machine-verifiable honesty works flawlessly within its domain and runs into trust that can't be removed in several places. An honest system names these places and narrows them, rather than pretending they don't exist.</p>
+
+<h3 id="section-11-1"><span class="n">11.1.</span>The oracle problem: where the system meets reality</h3>
+<p>Everything that belongs to the outside world (the real value of the settlement asset, the fact of delivery, the quality of goods) can be verified by a machine only up to the system's boundary; beyond it begins trust in an external data source. The same industry practice offers a telling example: customer and agent checks (KYC, KYA) happen off-chain, and only their result goes on-chain, so its reliability depends on whoever did the checking. <span class="cite">[42]</span> This can't be eliminated, but it can be narrowed: there should be as few external dependencies as possible, and each should be as simple and transparent as possible.</p>
+
+<h3 id="section-11-2"><span class="n">11.2.</span>The problem of meaning: where the system meets value and the future</h3>
+<p>The system verifies price, ownership and compliance with the rules, but not value and not intent. Whether anyone really needs a product can't be verified by a machine, in principle.</p>
+<div class="note key"><p><strong>Architecture can guarantee that no one lies about what happened, </strong>but it can't guarantee that what happens is meaningful.</p></div>
+<p>Verifiable authenticity solves the problem of trust, but not the problem of why something exists at all. This is exactly where machine-centric marketing meets human-centric marketing again: meaning, need and value are shaped by people, and this part of marketing is not handed over to the machine, neither as the audience nor as the checker.</p>
+
+<h3 id="section-11-3"><span class="n">11.3.</span>The storefront and trust points outside the core</h3>
+<p>The interface through which a person sees the system, as well as any state before launch (for example, gathering resources before the system starts running), are named trust points. They can't be removed completely, but they can be narrowed: the storefront has to derive every number from the core, and preliminary stages have to end with a single verifiable operation, after which the trust point disappears.</p>
+
+<h3 id="section-11-4"><span class="n">11.4.</span>Scope of application</h3>
+<p>The strong form of machine-verifiable honesty works fully where state and rules exist inside a verifiable environment: digital and financial assets, contracts, registries. For physical goods and services, almost any significant claim runs into the oracle boundary (Section 11.1): trust doesn't disappear but shifts to whoever issues the attestation (the manufacturer, a lab, a certification body). Verifiable credentials make that trust traceable and revocable, but they don't remove it. <span class="cite">[33]</span> So for most traditional commerce we are talking about the <em>weak</em> form of the concept: verifiable origin of claims, not verifiability of the facts themselves.</p>
+
+<h3 id="section-11-5"><span class="n">11.5.</span>Less obvious trust points</h3>
+<p>Beyond external data and the storefront, any verifiable system keeps less visible trust points: the compiler and whether the published code matches the deployed code; network infrastructure (for example, the sequencer in layer-2 networks); the data access provider through which the agent reads the state; and finally the AI agent itself as the interpreter of the data. Each can be narrowed through source code verification, running your own node or using several independent sources, but an honest system still names them.</p>
+
+<h3 id="section-11-6"><span class="n">11.6.</span>The substitution risk: verifiability as a metric</h3>
+<p>As soon as the cost of verification becomes a metric, there's a temptation to optimize the appearance of verifiability instead of verifiability itself. That's the classic Goodhart effect. GEO research shows that machine readers already reward the signs of evidence. <span class="cite">[15]</span> So the distinction that matters is between verifiability of <em>any</em> claim and verifiability of <em>significant</em> claims: it's easy to make something verifiable that doesn't matter for the choice. This is the operational side of the problem of meaning (Section 11.2).</p>
+
+<h3 id="section-11-7"><span class="n">11.7.</span>The price of immutability</h3>
+<p>The immutability of rules that the rules level depends on (Section 8.5) comes at a price. Frozen code can't be fixed if a vulnerability is found in it, and the history of decentralized finance shows this is a real risk. In practice, the ban on changing rules is often worked around through migration: a new contract is created and participants are asked to move to it, so the rules change after all, just by a back door. An honest system names this trade-off and narrows it: with a minimal core (Section 9.5), with audits and formal verification of invariants (Section 9.2), and, if an upgrade mechanism is truly needed, by describing it explicitly in the rules themselves, with conditions known in advance and a delay long enough for those who disagree to leave. In that case, the honesty of the process of changing the rules is no longer reduced to zero and becomes something to verify in its own right.</p>
+<div class="note status"><p><strong>The principle of limits: </strong>claims about honesty are acceptable only together with explicit limits on where they apply. A named limit is part of verifiability; a hidden limit is a violation of it.</p></div>
+</section>
+
+<section>
+<h2 id="section-12"><span class="n">12</span><span>Ethics: marketing to machines and manipulating machines</span></h2>
+<p>Machine-centric marketing has a dark twin. If a buyer agent is sensitive to position, wording and embedded instructions (Section 2.3), then "optimizing for the agent" easily turns into exploiting its weaknesses: tailoring descriptions to the model's biases, fake trust signals, prompt injection in a product listing. Experiments show that such tricks already work. <span class="cite">[26][27]</span> The one who gets hurt is the person who trusted the agent.</p>
+<div class="note own"><p><strong>Author's note: where the line is. </strong>Machine-centric marketing, as this paper understands it, is bound by one rule: <strong>you may influence an agent's choice only with what the agent can verify</strong>. Making verification cheaper, a clear data structure and verifiable commitments are legitimate means. Exploiting the model's biases, unverifiable claims dressed up as verified ones, and embedded instructions are manipulation, however well they work. In this logic, machine-verifiable honesty protects the choice a person has delegated, and it is a marketing advantage too.</p></div>
+<p>This also creates a duty in the other direction: since agents act on behalf of people, the environment itself should make it easier for them to resist manipulation, by giving them primary data instead of descriptions and a verification path instead of assurances.</p>
+</section>
+
+<section>
+<h2 id="section-13"><span class="n">13</span><span>The concept in summary</span></h2>
+<p>The move from digital commerce to agentic commerce creates a new object for marketing: <strong>the machine intermediary</strong>, which does more than deliver a message to the consumer: it takes part on its own in discovering, comparing and choosing an offer.</p>
+<p>So on top of traditional human-centric marketing, a new task appears, machine orientation: making the value of a product <strong>visible, interpretable, comparable, verifiable and preferable</strong> to an AI agent.</p>
+<p>It makes sense to think of this set of tasks as <strong>machine-centric marketing</strong> (Machine-Centric Marketing).</p>
+<div class="note key qlist"><p><strong>In this sense the term doesn't compete with Agentic Commerce, Machine Customer or Machine-Readable Commerce; it connects them at the level of marketing theory:</strong><span class="line">Machine Customer answers the question "who chooses?";</span><span class="line">Agentic Commerce answers "how does trade happen?";</span><span class="line">Machine-Readable Commerce answers "what should the information environment be like?";</span><span class="line">Machine-Centric Marketing answers "how should marketing work so that this machine buyer chooses our offer?"</span></p></div>
+<p>The answer to the last question comes down to trust, and <strong>a machine's trust can't be instilled: it can only be made unnecessary by replacing it with verification.</strong></p>
+<p>Hence the paper's second concept, <strong>machine-verifiable honesty</strong>: an environment where verification is almost free, deception is impossible or immediately visible, and honesty becomes the path of least resistance. It answers the question "why can a machine trust this offer?" and provides a measurable quantity: <strong>the cost of verification</strong>.</p>
+<p>From this follows a conclusion shared by both parts: for a machine audience, <strong>simplicity is not an aesthetic choice but a requirement of honesty</strong>. Every added complication adds surface where honesty can leak, and more for an observer to check.</p>
+<p>The most convincing offer for a machine is the one that is most verifiable in what matters: a minimum of custom logic on top of a proven foundation, nothing that can be "tweaked," and explicitly named limits where machine verification gives way to trust that can't be removed (external data and meaning).</p>
+<div class="note own"><p><strong>Author's note: why bring the fields together. </strong>Marketing sees the machine buyer as a new audience, economics sees an old problem of information asymmetry in a new form, AI researchers see a vulnerable executor, and Ethereum engineers see a trust minimization problem. All of these describe one process. As long as they stay apart, the marketer doesn't know that economists have formalized "trust," the economist doesn't know that verifiable disclosure can already be built, and the engineer doesn't know they are building marketing infrastructure. We see the value of this paper in showing one picture from different sides and giving it a name.</p></div>
+</section>
+
+<section class="srcs">
+<h2 id="section-14"><span class="n">14</span><span>Sources and terminology check</span></h2>
+<div class="note status"><p><strong>Limits of the check: </strong>terminology in this area is changing fast. The conclusion that Machine-Centric Marketing / Machine-Oriented Marketing and Machine-Verifiable Honesty are not yet generally accepted standard names is based on a web search of English-language sources (without full-text academic databases); it is not a claim that these expressions are never used anywhere.</p></div>
+<div class="formula">
+  <strong>The concept in one formula:</strong>
+  <em>Human-Centric Marketing → Machine-Centric Marketing; Agentic Commerce: the environment; Machine Customer: the audience; Machine-Readable Commerce: the infrastructure; Machine-Verifiable Honesty: the foundation of trust.</em>
+</div>
+<p>Below are the key sources for the review and the conceptual foundations. Dates and wording reflect the state of things as of October 2026.</p>
+<ol class="sources">
+  <li><span class="num">[1]</span><div><strong>IBM, “What Is Agentic Commerce?” </strong>Defines agentic commerce as a model of buying and selling involving AI agents. Published January 23, 2026. <a href="https://www.ibm.com/think/topics/agentic-commerce">https://www.ibm.com/think/topics/agentic-commerce</a></div></li>
+  <li><span class="num">[2]</span><div><strong>Deloitte, “Agentic Commerce: AI Shopping Agents Guide.” </strong>On the move from assisted shopping to agentic and autonomous shopping. <a href="https://www.deloitte.com/us/en/Industries/consumer/articles/agentic-commerce-ai-shopping-agents-guide.html">https://www.deloitte.com/us/en/Industries/consumer/articles/agentic-commerce-ai-shopping-agents-guide.html</a></div></li>
+  <li><span class="num">[3]</span><div><strong>Deloitte, “Agentic commerce: The future of B2B commerce.” </strong>Describes buyer agents, seller agents and agent-to-agent commerce in B2B. Published June 26, 2026. <a href="https://www.deloitte.com/us/en/what-we-do/capabilities/applied-artificial-intelligence/articles/b2b-agentic-commerce.html">https://www.deloitte.com/us/en/what-we-do/capabilities/applied-artificial-intelligence/articles/b2b-agentic-commerce.html</a></div></li>
+  <li><span class="num">[4]</span><div><strong>Paul F. Accornero, “When the Customer is an Algorithm: A Demand-Side Theory of the Machine Customer.” </strong>A 2026 academic paper formalizing the machine customer and the split between consumer and shopper in delegated purchasing, which the author calls the "shopper schism." <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=7037438">https://papers.ssrn.com/sol3/papers.cfm?abstract_id=7037438</a></div></li>
+  <li><span class="num">[5]</span><div><strong>McKinsey &amp; Company, “The automation curve in agentic commerce.” </strong>January 28, 2026. On the need for machine-readable catalogs, policies and value propositions in agentic commerce. <a href="https://www.mckinsey.com/capabilities/quantumblack/our-insights/the-automation-curve-in-agentic-commerce">https://www.mckinsey.com/capabilities/quantumblack/our-insights/the-automation-curve-in-agentic-commerce</a></div></li>
+  <li><span class="num">[6]</span><div><strong>EY, “How to win in agentic commerce as AI agents decide and transact.” </strong>Confirms the shift toward AI agents that evaluate offers and can complete purchases directly; emphasizes interpretable commercial data. <a href="https://www.ey.com/en_us/insights/ai/agentic-commerce-strategy">https://www.ey.com/en_us/insights/ai/agentic-commerce-strategy</a></div></li>
+  <li><span class="num">[7]</span><div><strong>Vitalik Buterin, “Credible Neutrality As A Guiding Principle.” </strong>The idea of a neutral mechanism whose neutrality is visible from its design; four rules: don't write specific people or specific outcomes into the mechanism; open source and publicly verifiable execution; keep it simple; don't change it too often. Published January 3, 2020, nakamoto.com. <a href="https://nakamoto.com/credible-neutrality/">https://nakamoto.com/credible-neutrality/</a></div></li>
+  <li><span class="num">[8]</span><div><strong>Nick Szabo, “Trusted Third Parties are Security Holes.” </strong>A classic text on trust minimization: a trusted third party in a protocol's design is the source of its main costs and risks. 2001. <a href="https://nakamotoinstitute.org/trusted-third-parties/">https://nakamotoinstitute.org/trusted-third-parties/</a></div></li>
+  <li><span class="num">[9]</span><div><strong>John R. Douceur, “The Sybil Attack.” </strong>IPTPS 2002, LNCS vol. 2429, Springer, pp. 251–260. Shows that without a logically centralized authority, Sybil attacks are always possible except under extreme and unrealistic assumptions of resource parity and coordination among entities. <a href="https://doi.org/10.1007/3-540-45748-8_24">https://doi.org/10.1007/3-540-45748-8_24</a></div></li>
+  <li><span class="num">[10]</span><div><strong>Vitalik Buterin, “Ethereum Whitepaper.” </strong>Describes a platform for executable contracts with public state, today the most complete environment for implementing machine-verifiable honesty. 2014. <a href="https://ethereum.org/whitepaper">https://ethereum.org/whitepaper</a></div></li>
+  <li><span class="num">[11]</span><div><strong>Hayden Adams, Noah Zinsmeister, Dan Robinson, “Uniswap v2 Core”; Uniswap v2 architecture documentation. </strong>An example of a minimal core and a core/periphery split: the core is deliberately minimal for analyzability and security, the periphery is not essential to the protocol. 2020. <a href="https://app.uniswap.org/whitepaper.pdf">https://app.uniswap.org/whitepaper.pdf</a> · <a href="https://developers.uniswap.org/docs/protocols/v2/concepts/architecture">https://developers.uniswap.org/docs/protocols/v2/concepts/architecture</a></div></li>
+  <li><span class="num">[12]</span><div><strong>Michal S. Gal, Niva Elkin-Koren, “Algorithmic Consumers.” </strong><em>Harvard Journal of Law &amp; Technology</em>, 30(2), 309–353, 2017. Marketing and law. <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=2876201">https://papers.ssrn.com/sol3/papers.cfm?abstract_id=2876201</a></div></li>
+  <li><span class="num">[13]</span><div><strong>Niraj Dawar, Neil Bendle, “Marketing in the Age of Alexa.” </strong><em>Harvard Business Review</em>, 96(3), 80–86, 2018. Marketing. <a href="https://hbr.org/2018/05/marketing-in-the-age-of-alexa">https://hbr.org/2018/05/marketing-in-the-age-of-alexa</a></div></li>
+  <li><span class="num">[14]</span><div><strong>Don Scheibenreif, Mark Raskino, “When Machines Become Customers.” </strong>Gartner, 2023. Marketing, industry analysis. <a href="https://www.gartner.com/en/publications/when-machines-become-customers">https://www.gartner.com/en/publications/when-machines-become-customers</a></div></li>
+  <li><span class="num">[15]</span><div><strong>Pranjal Aggarwal, Vishvak Murahari, Tanmay Rajpurohit, Ashwin Kalyan, Karthik Narasimhan, Ameet Deshpande, “GEO: Generative Engine Optimization.” </strong><em>KDD ’24</em>, 5–16, 2024. Machine visibility. <a href="https://doi.org/10.1145/3637528.3671900">https://doi.org/10.1145/3637528.3671900</a></div></li>
+  <li><span class="num">[16]</span><div><strong>Robert M. Morgan, Shelby D. Hunt, “The Commitment-Trust Theory of Relationship Marketing.” </strong><em>Journal of Marketing</em>, 58(3), 20–38, 1994. Relationship marketing. <a href="https://doi.org/10.1177/002224299405800302">https://doi.org/10.1177/002224299405800302</a></div></li>
+  <li><span class="num">[17]</span><div><strong>George A. Akerlof, “The Market for ‘Lemons’: Quality Uncertainty and the Market Mechanism.” </strong><em>Quarterly Journal of Economics</em>, 84(3), 488–500, 1970. Economics of information. <a href="https://doi.org/10.2307/1879431">https://doi.org/10.2307/1879431</a></div></li>
+  <li><span class="num">[18]</span><div><strong>Michael Spence, “Job Market Signaling.” </strong><em>Quarterly Journal of Economics</em>, 87(3), 355–374, 1973. Signaling theory. <a href="https://doi.org/10.2307/1882010">https://doi.org/10.2307/1882010</a></div></li>
+  <li><span class="num">[19]</span><div><strong>Sanford J. Grossman, “The Informational Role of Warranties and Private Disclosure about Product Quality.” </strong><em>Journal of Law and Economics</em>, 24(3), 461–483, 1981. Verifiable disclosure. <a href="https://doi.org/10.1086/466995">https://doi.org/10.1086/466995</a></div></li>
+  <li><span class="num">[20]</span><div><strong>Paul R. Milgrom, “Good News and Bad News: Representation Theorems and Applications.” </strong><em>Bell Journal of Economics</em>, 12(2), 380–391, 1981. Verifiable disclosure. <a href="https://doi.org/10.2307/3003562">https://doi.org/10.2307/3003562</a></div></li>
+  <li><span class="num">[21]</span><div><strong>Vincent P. Crawford, Joel Sobel, “Strategic Information Transmission.” </strong><em>Econometrica</em>, 50(6), 1431–1451, 1982. Cheap talk. <a href="https://doi.org/10.2307/1913390">https://doi.org/10.2307/1913390</a></div></li>
+  <li><span class="num">[22]</span><div><strong>Emir Kamenica, Matthew Gentzkow, “Bayesian Persuasion.” </strong><em>American Economic Review</em>, 101(6), 2590–2615, 2011. Persuasion theory. <a href="https://doi.org/10.1257/aer.101.6.2590">https://doi.org/10.1257/aer.101.6.2590</a></div></li>
+  <li><span class="num">[23]</span><div><strong>Oliver E. Williamson, “Credible Commitments: Using Hostages to Support Exchange.” </strong><em>American Economic Review</em>, 73(4), 519–540, 1983. Credible commitments.</div></li>
+  <li><span class="num">[24]</span><div><strong>Paul Klemperer, “Competition when Consumers have Switching Costs.” </strong><em>Review of Economic Studies</em>, 62(4), 515–539, 1995. Switching costs. <a href="https://doi.org/10.2307/2298075">https://doi.org/10.2307/2298075</a></div></li>
+  <li><span class="num">[25]</span><div><strong>Peyman Shahidi, Gili Rusak, Benjamin S. Manning, Andrey Fradkin, John J. Horton, “The Coasean Singularity? Demand, Supply, and Market Design with AI Agents.” </strong>NBER Working Paper 34468, 2025. Economics of AI agents. <a href="https://www.nber.org/papers/w34468">https://www.nber.org/papers/w34468</a></div></li>
+  <li><span class="num">[26]</span><div><strong>Amine Allouah, Omar Besbes, Josué D. Figueroa, Yash Kanoria, Akshit Kumar, “What Is Your AI Agent Buying? Evaluation, Biases, Model Dependence, &amp; Emerging Implications of Agentic E-Commerce.” </strong><em>Proceedings of the ACM Web Conference 2026</em>; arXiv:2508.02630. Agent behavior evidence. <a href="https://doi.org/10.1145/3774904.3792943">https://doi.org/10.1145/3774904.3792943</a></div></li>
+  <li><span class="num">[27]</span><div><strong>Gagan Bansal et al., “Magentic Marketplace: An Open-Source Environment for Studying Agentic Markets.” </strong>Microsoft Research, arXiv:2510.25779, 2025 (preprint). Agent behavior evidence. <a href="https://arxiv.org/abs/2510.25779">https://arxiv.org/abs/2510.25779</a></div></li>
+  <li><span class="num">[28]</span><div><strong>Manuel Cherep, Pattie Maes, Nikhil Singh, “LLM Agents Are Hypersensitive to Nudges.” </strong>arXiv:2505.11584, 2025 (preprint). Agent behavior evidence. <a href="https://arxiv.org/abs/2505.11584">https://arxiv.org/abs/2505.11584</a></div></li>
+  <li><span class="num">[29]</span><div><strong>“From Digital Distrust to Codified Honesty: Experimental Evidence on Generative AI in Credence Goods Markets,” </strong>arXiv:2509.06069, 2025; <strong>“LLM-Agent Interactions on Markets with Information Asymmetries,” </strong>arXiv:2603.08853, 2026 (preprints). Experimental economics. <a href="https://arxiv.org/abs/2509.06069">https://arxiv.org/abs/2509.06069</a></div></li>
+  <li><span class="num">[30]</span><div><strong>Filippos Ventirozos, Matthew Shardlow, “Paying to Know: Micro-Transaction Markets for Verified Product Information in Agentic E-Commerce.” </strong>arXiv:2606.24783, 2026 (preprint). Closest work. <a href="https://arxiv.org/abs/2606.24783">https://arxiv.org/abs/2606.24783</a></div></li>
+  <li><span class="num">[31]</span><div><strong>C. Xie, “When Pricing Agents Meet Buying Agents: Personalized Pricing and Verifiable Trust.” </strong>arXiv:2607.16343, 2026 (working paper). Closest work. <a href="https://arxiv.org/abs/2607.16343">https://arxiv.org/abs/2607.16343</a></div></li>
+  <li><span class="num">[32]</span><div><strong>S. S. Madugula, P. Esteva de la Rosa, D. Shankar, “The Dynamic Verifiable Multi-Agent Human Agentic Loyalty Loop (DVM-HALL) Model and the Net Human-Agent Score (NHAS) in Autonomous Commerce.” </strong>arXiv:2607.13998, 2026 (preprint). Loyalty in agentic commerce. <a href="https://arxiv.org/abs/2607.13998">https://arxiv.org/abs/2607.13998</a></div></li>
+  <li><span class="num">[33]</span><div><strong>W3C, “Verifiable Credentials Data Model v2.0.” </strong>W3C Recommendation, May 15, 2025. Standard. <a href="https://www.w3.org/TR/vc-data-model-2.0/">https://www.w3.org/TR/vc-data-model-2.0/</a></div></li>
+  <li><span class="num">[34]</span><div><strong>Google, “Announcing Agent Payments Protocol (AP2).” </strong>September 16, 2025. Agent payment protocol. <a href="https://cloud.google.com/blog/products/ai-machine-learning/announcing-agents-to-payments-ap2-protocol">https://cloud.google.com/blog/products/ai-machine-learning/announcing-agents-to-payments-ap2-protocol</a></div></li>
+  <li><span class="num">[35]</span><div><strong>Mastercard, “How Verifiable Intent builds trust in agentic AI commerce.” </strong>2026. Trust standard for agentic commerce. <a href="https://www.mastercard.com/us/en/news-and-trends/stories/2026/verifiable-intent.html">https://www.mastercard.com/us/en/news-and-trends/stories/2026/verifiable-intent.html</a></div></li>
+  <li><span class="num">[36]</span><div><strong>Marco De Rossi, Davide Crapis, Jordan Ellis, Erik Reppel, “ERC-8004: Trustless Agents” </strong>(Draft), Ethereum Improvement Proposals, 2025; empirical study: “Can Trustless Agents Be Trusted?”, arXiv:2606.26028, 2026. Ethereum. <a href="https://eips.ethereum.org/EIPS/eip-8004">https://eips.ethereum.org/EIPS/eip-8004</a></div></li>
+  <li><span class="num">[37]</span><div><strong>Gaby G. Dagher, Benedikt Bünz, Joseph Bonneau, Jeremy Clark, Dan Boneh, “Provisions: Privacy-preserving Proofs of Solvency for Bitcoin Exchanges.” </strong><em>ACM CCS ’15</em>, 2015. Cryptography.</div></li>
+  <li><span class="num">[38]</span><div><strong>Stripe &amp; OpenAI, “Agentic Commerce Protocol,” </strong>2025 (beta), <a href="https://www.agenticcommerce.dev/">https://www.agenticcommerce.dev/</a>; <strong>Coinbase, “x402,” </strong>2025, <a href="https://www.coinbase.com/developer-platform/discover/launches/x402">https://www.coinbase.com/developer-platform/discover/launches/x402</a>. Agent payment protocols.</div></li>
+  <li><span class="num">[39]</span><div><strong>Jerome H. Saltzer, Michael D. Schroeder, “The Protection of Information in Computer Systems.” </strong><em>Proceedings of the IEEE</em>, 63(9), 1278–1308, 1975. The "economy of mechanism" principle: keep the design as simple and small as possible.</div></li>
+  <li><span class="num">[40]</span><div><strong>Vitalik Buterin, “The cryptographic world computer.” </strong>September 27, 2026. Ethereum, verifiability and privacy. <a href="https://vitalik.eth.limo/general/2026/09/27/the_cryptographic_world_computer.html">https://vitalik.eth.limo/general/2026/09/27/the_cryptographic_world_computer.html</a></div></li>
+  <li><span class="num">[41]</span><div><strong>Vitalik Buterin, “Encapsulated vs systemic complexity in protocol design.” </strong>February 28, 2022. Protocol design. <a href="https://vitalik.eth.limo/general/2022/02/28/complexity.html">https://vitalik.eth.limo/general/2022/02/28/complexity.html</a></div></li>
+  <li><span class="num">[42]</span><div><strong>Will Su, Robert Mitchnick, Jay Jacobs, William Helm, “The Machine-Native Economy: How digital assets connect intelligence, commerce, and compute.” </strong>BlackRock, September 22, 2026. Industry report (per the publisher's disclaimer, not research or investment advice).</div></li>
+  <li><span class="num">[43]</span><div><strong>Noah Hodge (TRM Labs), “Who’s Actually Paying? Measuring AI Agent Payments Onchain.” </strong>September 9, 2026. On-chain analytics of agent payments. <a href="https://www.trmlabs.com/trm-tech-blog/whos-actually-paying-measuring-ai-agent-payments-onchain">https://www.trmlabs.com/trm-tech-blog/whos-actually-paying-measuring-ai-agent-payments-onchain</a></div></li>
+  <li><span class="num">[44]</span><div><strong>Katja Forbes, “Machine Customers: The Evolution Has Begun. How AI that buys is changing everything.” </strong>Publish Central, 2025, ISBN 978-1-923630-00-0. Marketing, practitioner literature.</div></li>
+  <li><span class="num">[45]</span><div><strong>Paul F. Accornero, “The Algorithmic Shopper.” </strong>Announced; scheduled for April 13, 2027, ISBN 978-1-250-48578-6. Marketing, practitioner literature.</div></li>
+  <li><span class="num">[46]</span><div><strong>Lin William Cong, Xi Li, Ke Tang, Yang Yang, “Crypto Wash Trading.” </strong>NBER Working Paper 30783, 2022; <em>Management Science</em>, 2023. Market manipulation. <a href="https://doi.org/10.3386/w30783">https://doi.org/10.3386/w30783</a></div></li>
+  <li><span class="num">[47]</span><div><strong>Chainalysis, “The 2025 Crypto Crime Report,” </strong>section on market manipulation (wash trading and pump-and-dump schemes on DEXs). January 2025. On-chain analytics.</div></li>
+  <li><span class="num">[48]</span><div><strong>The Block, “LayerZero’s ZRO token faces mixed reactions as sybil crackdown continues.” </strong>June 26, 2024. Filtering address farms during a token distribution. <a href="https://www.theblock.co/news/ecosystems/2024-06-26-layerzeros-zro-token-faces-mixed-reactions-as-sybil-crackdown-continues-301626">https://www.theblock.co/news/ecosystems/2024-06-26-layerzeros-zro-token-faces-mixed-reactions-as-sybil-crackdown-continues-301626</a></div></li>
+  <li><span class="num">[49]</span><div><strong>Tempo &amp; Stripe, “Machine Payments Protocol.” </strong>March 18, 2026. Machine payment protocol. <a href="https://mpp.dev/overview">https://mpp.dev/overview</a></div></li>
+  <li><span class="num">[50]</span><div><strong>Visa, “Trusted Agent Protocol.” </strong>A protocol that lets merchants recognize trusted agents. <a href="https://developer.visa.com/capabilities/trusted-agent-protocol">https://developer.visa.com/capabilities/trusted-agent-protocol</a></div></li>
+  <li><span class="num">[51]</span><div><strong>Satoshi Nakamoto, “Bitcoin: A Peer-to-Peer Electronic Cash System.” </strong>2008. The first working system in which trust in an intermediary was replaced by cryptographic proof. <a href="https://bitcoin.org/bitcoin.pdf">https://bitcoin.org/bitcoin.pdf</a></div></li>
+  <li><span class="num">[52]</span><div><strong>Marko Sarstedt, Susanne Adler, Monika Imschloss, “Machine marketing: rethinking the customer in the age of generative AI.” </strong><em>Journal of Marketing Analytics</em>, 2026 (research note, open access). Marketing. <a href="https://doi.org/10.1057/s41270-026-00521-y">https://doi.org/10.1057/s41270-026-00521-y</a></div></li>
+</ol>
+
+<p class="closing">Concept paper · October 2026. Author: <b>Human and Machine</b>. Romul Protocol. An interdisciplinary review with the author's own concept: it presents what is known with references to sources, the author's ideas and principles for implementing them, not a specific system; preprints from 2025–2026 have not been peer reviewed, and their conclusions may change; this is not a deployment guide and contains no financial advice. All claims about honesty come with explicit limits on where they apply.</p>
+<div class="rights">
+<p>This paper was prepared as part of the Romul Protocol project; the principles it sets out are used in the project's development.</p>
+<p><strong>About authorship. </strong>The name "Human and Machine" literally describes how this paper was written. The ideas, the concept and the hands-on experience belong to the human; finding and checking sources, comparing with the literature, structure and editing were done together with a language model. Decisions about content and responsibility for the text remain with the human.</p>
+<p><strong>How to cite. </strong>Human and Machine. Machine-Centric Marketing: Where a new marketing logic fits in the age of AI agents and machine buyers, and why machine-verifiable honesty is its foundation. Romul Protocol, October 2026. <a href="https://doi.org/10.5281/zenodo.23128107">https://doi.org/10.5281/zenodo.23128107</a></p>
+<p><strong>Online. </strong>Web version: <a href="https://proof-not-promise.github.io/romul-protocol/">https://proof-not-promise.github.io/romul-protocol/</a> · Repository: <a href="https://github.com/proof-not-promise/romul-protocol">https://github.com/proof-not-promise/romul-protocol</a></p>
+<p>© 2026 Human and Machine, Romul Protocol. This text is licensed under Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International (CC BY-NC-ND 4.0): you may copy and share it for non-commercial purposes with attribution and a link to the source, without modification. <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/">https://creativecommons.org/licenses/by-nc-nd/4.0/</a></p>
+</div>
+</section>
+
+</main>
+
+
+</td></tr></tbody>
+</table>
+</body>
+</html>
